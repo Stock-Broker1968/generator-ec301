@@ -1,0 +1,15 @@
+{
+  "name": "ec0301-generator",
+  "version": "1.0.0",
+  "description": "Aplicación web para generar productos del estándar EC0301 - Diseño de cursos de formación del capital humano",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "build": "echo 'Build complete'",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": ["EC0301", "educacion", "capacitacion", "certificacion", "mexico"],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "homepage": "https://ec0301-generator.onrender.com"
+}
