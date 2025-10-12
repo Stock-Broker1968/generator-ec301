@@ -3,10 +3,10 @@ logs
 *.log
 npm-debug.log*
 
-# Dependencies
+# Dependencias
 node_modules/
 
-# Environment variables
+# Entorno
 .env
 .env.local
 
