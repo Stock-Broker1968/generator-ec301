@@ -1,12 +1,12 @@
 {
   "name": "ec0301-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Aplicación web para generar productos del estándar EC0301 - Diseño de cursos de formación del capital humano",
-  "main": "index.html",
+  "main": "src/app.js",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "build": "echo 'Build complete'",
-    "dev": "python -m http.server 8000"
+    "start": "npx http-server .",
+    "lint": "echo 'Configura ESLint para este proyecto.'",
+    "test": "echo 'Agrega pruebas unitarias.'"
   },
   "keywords": ["EC0301", "educacion", "capacitacion", "certificacion", "mexico"],
   "author": "Tu Nombre",
