@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manual del Participante – EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <style>
+    .toolbar{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+    textarea, input{width:100%;padding:.8rem;border:2px solid var(--border);border-radius:8px;margin-bottom:1rem;resize:vertical}
+    .editor{border:2px solid var(--border);border-radius:10px;padding:1rem;min-height:400px;background:#fff}
+    button:disabled{opacity:.5;cursor:not-allowed}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+      <button id="btnGenIA" class="btn btn-primary" disabled onclick="generateWithIA()">
+        <i class="fa-solid fa-robot"></i> Generar Propuesta IA
+      </button>
+      <button class="btn btn-primary" onclick="exportPDF()">
+        <i class="fa-solid fa-file-pdf"></i> Generar PDF
+      </button>
+      <button class="btn btn-primary" onclick="markComplete()">
+        <i class="fa-solid fa-check"></i> Marcar 100%
+      </button>
+    </div>
+
+    <h2 class="section-title">Manual del Participante</h2>
+
+    <!-- Encabezado (no editable) -->
+    <input id="hd_curso" disabled placeholder="Curso">
+    <input id="hd_disenador" disabled placeholder="Diseñador">
+    <input id="hd_instructor" disabled placeholder="Instructor">
+
+    <!-- Editor enriquecido -->
+    <div id="editor" class="editor" contenteditable="true">
+      <h3>## Presentación</h3>
+      <p>Bienvenida al participante...</p>
+      <h3>## Introducción</h3>
+      <p>Resumen de los temas y beneficios...</p>
+      <h3>## Objetivo General</h3>
+      <p><!-- IA y Carta Descriptiva insertan aquí --></p>
+      <h3>## Objetivos Particulares</h3>
+      <ul><!-- IA llena automáticamente --></ul>
+      <h3>## Desarrollo de Temas</h3>
+      <!-- IA genera sección por tema -->
+      <h3>## Fuentes de Información</h3>
+      <ul><!-- IA propone al menos 3 fuentes --></ul>
+    </div>
+  </div>
+
+  <script>
+    const KEY_CARTA = 'EC0301_CARTA';
+    let carta;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      carta = JSON.parse(localStorage.getItem(KEY_CARTA) || '{}');
+      // Rellenar encabezado
+      ['curso','diseñador','instructor'].forEach(k => {
+        document.getElementById('hd_' + k).value = carta[k] || '';
+      });
+      // Habilitar botón IA solo si hay carta completa
+      document.getElementById('btnGenIA').disabled = !(carta.objetivo && carta.op1);
+    });
+
+    async function generateWithIA() {
+      const prompt = `
+Rol: diseñador instruccional experto en EC0301.
+Tarea: crea un borrador de manual de participante.
+Información del curso:
+Objetivo General: ${carta.og?.acc || ''}
+Objetivos Particulares: ${[carta.op1?.accion, carta.op2?.accion, carta.op3?.accion].join('; ')}
+Temario: ${carta.op1?.temas}\\n${carta.op2?.temas}\\n${carta.op3?.temas}
+Instrucciones: investiga, desarrolla de simple a complejo, añade actividades y síntesis. Formatea con ## para secciones.
+Formato de salida: texto con marcadores ##.
+`;
+      const res = await fetch('/api/ia-generate-manual', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      document.getElementById('editor').innerHTML = data.content;
+    }
+
+    function exportPDF() {
+      const content = document.getElementById('editor').innerHTML;
+      fetch('/api/generate-manual-pdf', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ header: carta, html: content })
+      })
+      .then(r => r.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Manual_Participante_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.click();
+      });
+    }
+
+    function markComplete(){
+      parent?.postMessage({ deliverable: 2, progress: 100 }, '*');
+    }
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
