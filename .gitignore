@@ -1,19 +1,5 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Dependencias
 node_modules/
-
-# Entorno
+*.log
 .env
-.env.local
-
-# IDE
-.vscode/
-.idea/
-
-# OS
 .DS_Store
 Thumbs.db
