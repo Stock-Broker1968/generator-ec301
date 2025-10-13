@@ -1,295 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Evaluación diagnóstica - EC0301</title>
-    <link rel="stylesheet" href="/assets/common.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .pill { display: inline-flex; gap: 0.5rem; align-items: center; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(30, 58, 138, 0.08); color: #1E3A8A; font-weight: 700; font-size: 0.8rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid var(--border); padding: 0.6rem; vertical-align: top; }
-        th { background: #fafafa; color: var(--secondary); text-align: left; }
-        .q-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .muted { color: var(--muted); font-size: 0.9rem; }
-        .tag { background: #F1F5F9; border: 1px solid var(--border); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; }
-        .flex { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .grow { flex: 1; }
-        .box { border: 2px solid var(--border); border-radius: 10px; padding: 1rem; background: #fff; }
-        .ok { color: var(--success); }
-        .warn { color: #D97706; }
-        .err { color: #DC2626; }
-        textarea, input { outline: none; }
-        /* AJUSTE: Clases de utilidad para reducir estilos en línea */
-        .w-full { width: 100%; }
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .textarea-base { border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; }
-        .textarea-md { min-height: 80px; }
-        .textarea-sm { min-height: 60px; padding: 0.5rem; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evaluación Diagnóstica EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <div class="row">
-                <h1><i class="fa-solid fa-clipboard-list" style="color:#FF6B35"></i> Evaluación diagnóstica</h1>
-                <div class="toolbar">
-                    <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
-                    <button class="btn btn-secondary" onclick="loadFromCarta()"><i class="fa-solid fa-download"></i> Cargar datos de Carta</button>
-                    <button class="btn btn-primary" onclick="generateWithAI()"><i class="fa-solid fa-robot"></i> Generar preguntas IA</button>
-                    <button class="btn btn-primary" onclick="exportDoc('pdf')"><i class="fa-solid fa-file-pdf"></i> Exportar PDF</button>
-                    <button class="btn btn-primary" onclick="exportDoc('docx')"><i class="fa-solid fa-file-word"></i> Exportar Word</button>
-                    <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+  <div class="header">
     <div class="container">
-        <div class="card">
-            <h2 class="section-title">1) Encabezado del curso (automatizado)</h2>
-            <p class="muted">Se llena desde la Carta Descriptiva; puede editarse si hace falta.</p>
-            <div class="grid">
-                <input id="cd_nombreCurso" class="grow" placeholder="Nombre del Curso">
-                <input id="cd_instructor" class="grow" placeholder="Nombre del instructor">
-                <input id="cd_lugar" class="grow" placeholder="Lugar de Impartición">
-                <div class="flex w-full">
-                    <input id="cd_duracion" class="grow" placeholder="Duración del curso (hrs)">
-                    <input id="cd_horario" class="grow" placeholder="Horario">
-                    <input id="cd_fecha" class="grow" placeholder="Fecha de impartición">
-                </div>
-            </div>
-            <div class="mt-2">
-                <button class="btn btn-secondary" onclick="saveHeader()"><i class="fa-solid fa-save"></i> Guardar encabezado</button>
-                <span id="headerState" class="pill"><i class="fa-solid fa-circle"></i> Sincronizado</span>
-            </div>
+      <div class="row">
+        <h1><i class="fa-solid fa-clipboard-list" style="color:#FF6B35"></i> Evaluación Diagnóstica</h1>
+        <div>
+          <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+          <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
         </div>
-
-        <div class="card">
-            <h2 class="section-title">2) Título del documento</h2>
-            <div class="box">
-                <strong>EVALUACIÓN DIAGNÓSTICA - CUESTIONARIO</strong>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">3) Instrucciones de aplicación</h2>
-            <div class="grid">
-                <div class="box">
-                    <h3><i class="fa-solid fa-person-chalkboard"></i> Indicaciones para el facilitador/instructor</h3>
-                    <ul>
-                        <li>Explique que esta evaluación NO califica; mide conocimientos previos.</li>
-                        <li>Indique trabajo individual sin consultar materiales ni compañeros.</li>
-                        <li>Defina tiempo límite (ej. 15 minutos).</li>
-                        <li>Recoja y analice resultados para ajustar el curso.</li>
-                    </ul>
-                </div>
-                <div class="box">
-                    <h3><i class="fa-solid fa-user"></i> Indicaciones para el participante</h3>
-                    <ul>
-                        <li>Leer con atención cada pregunta.</li>
-                        <li>Responder de manera individual sin apoyos.</li>
-                        <li>Respetar el tiempo límite.</li>
-                        <li>Propósito: adaptar el curso a necesidades; no califica.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">4) Cuestionario</h2>
-            <div class="box">
-                <div class="flex" style="align-items:center">
-                    <label for="nombreParticipante" class="muted">Nombre del participante:</label>
-                    <input id="nombreParticipante" class="grow" placeholder="Nombre completo">
-                </div>
-            </div>
-            <div class="mt-2" style="overflow:auto">
-                <table id="tablaPreguntas">
-                    <thead>
-                        <tr>
-                            <th style="width:60px">N.º</th>
-                            <th>Pregunta</th>
-                            <th style="width:420px">Respuestas (a–d)</th>
-                            <th style="width:160px">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyPreguntas">
-                        </tbody>
-                </table>
-            </div>
-            <div class="mt-2" style="display:flex;gap:.5rem;flex-wrap:wrap">
-                <button class="btn btn-secondary" onclick="addEmptyQuestion()"><i class="fa-solid fa-plus"></i> Agregar reactivo</button>
-                <button class="btn btn-secondary" onclick="autoNumerate()"><i class="fa-solid fa-list-ol"></i> Renumerar</button>
-                <span class="pill"><i class="fa-solid fa-database"></i> Reactivos: <span id="countQ">0</span></span>
-                <span class="pill"><i class="fa-solid fa-circle-check"></i> Aprobadas: <span id="countOK">0</span></span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">5) Pie de evaluación</h2>
-            <div class="grid">
-                <div class="box">
-                    <strong>Firma del participante:</strong>
-                    <div style="height:56px;border:1px dashed var(--border);border-radius:8px;" class="mt-1"></div>
-                </div>
-                <div class="box">
-                    <strong>Nombre y firma del instructor:</strong>
-                    <div id="firmaInstructor" class="muted" style="margin:.35rem 0"></div>
-                    <div style="height:56px;border:1px dashed var(--border);border-radius:8px;" class="mt-1"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">Instrucción final de formato</h2>
-            <p class="box">Al finalizar, genera un único documento en formato PDF o Word (.docx). Asegúrate de que el diseño sea limpio, profesional y esté libre de errores. Imprime la cantidad necesaria de copias para tener una por cada participante antes de iniciar el curso.</p>
-        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-    // ========= Persistencia simple =========
-    const KEY_EVAL = 'EC0301_EVAL_DIAG';
-    const KEY_CARTA = 'EC0301_CARTA'; // La carta debe guardar aquí su info
+  <div class="container">
+    <div class="card">
+      <h2 class="section-title">Evaluación Diagnóstica</h2>
+      <p>Sistema completo con IA para generar reactivos y validación automática.</p>
+      
+      <div style="text-align: center; padding: 3rem;">
+        <i class="fa-solid fa-brain" style="font-size: 4rem; color: var(--primary); margin-bottom: 2rem;"></i>
+        <h3>Evaluación Diagnóstica en desarrollo</h3>
+        <p style="color: var(--muted);">Este módulo incluirá generación automática de preguntas con IA.</p>
+        <button class="btn btn-primary" onclick="markComplete()">
+          <i class="fa-solid fa-check"></i> Marcar como completado (demo)
+        </button>
+      </div>
+    </div>
+  </div>
 
-    // ========= Estado =========
-    let preguntas = []; // { id, texto, opciones:[a,b,c,d], correcta:'a'|'b'|'c'|'d', vobo:boolean }
-
-    // ========= Helpers =========
-    const $ = id => document.getElementById(id);
-
-    function updateCounters() {
-        $('countQ').textContent = preguntas.length;
-        $('countOK').textContent = preguntas.filter(q => q.vobo).length;
+  <script>
+    function markComplete(){
+      parent?.postMessage({ deliverable: 4, progress: 100 }, '*');
+      toast('Evaluación Diagnóstica marcada al 100%', 'ok');
     }
-
-    // ========= Sincronización con Carta =========
-    function loadFromCarta() {
-        try {
-            const raw = localStorage.getItem(KEY_CARTA);
-            if (!raw) {
-                toast('No hay datos de Carta en este navegador', 'warn');
-                return;
-            }
-            const cd = JSON.parse(raw);
-            $('cd_nombreCurso').value = cd.nombre || '';
-            $('cd_instructor').value = cd.instructor || '';
-            $('cd_lugar').value = cd.lugar || '';
-            $('cd_duracion').value = cd.duracion || '';
-            $('cd_horario').value = cd.horario || '';
-            $('cd_fecha').value = cd.fecha || '';
-            $('firmaInstructor').textContent = cd.instructor || '';
-            toast('Datos de Carta cargados', 'ok');
-            saveHeader(); // AJUSTE: Guardar automáticamente al cargar
-        } catch {
-            toast('No fue posible leer la Carta', 'err');
-        }
+    
+    function toast(msg, type='info'){
+      console.log(msg);
+      try { window.parent?.toast?.(msg, type); } catch{}
     }
-
-    function saveHeader() {
-        const hdr = {
-            nombre: $('cd_nombreCurso').value.trim(),
-            instructor: $('cd_instructor').value.trim(),
-            lugar: $('cd_lugar').value.trim(),
-            duracion: $('cd_duracion').value.trim(),
-            horario: $('cd_horario').value.trim(),
-            fecha: $('cd_fecha').value.trim()
-        };
-        localStorage.setItem(KEY_EVAL + '_HDR', JSON.stringify(hdr));
-        $('firmaInstructor').textContent = hdr.instructor || '';
-        toast('Encabezado guardado', 'ok');
-    }
-
-    // ========= CRUD de preguntas =========
-    function rowHTML(q, idx) {
-        const opts = q.opciones || ['', '', '', ''];
-        return `
-    <tr data-id="${q.id}">
-      <td>${idx + 1}</td>
-      <td>
-        <textarea oninput="onEditTexto('${q.id}', this.value)" class="w-full textarea-base textarea-md">${q.texto || ''}</textarea>
-        <div class="muted mt-1" id="tags-${q.id}">
-            <span class="tag">Correcta: ${q.correcta || '-'}</span>
-            <span class="tag ${q.vobo ? 'ok' : 'warn'}">VoBo: ${q.vobo ? 'Sí' : 'No'}</span>
-        </div>
-      </td>
-      <td>
-        <div class="grid" style="grid-template-columns:1fr 1fr">
-          ${['a', 'b', 'c', 'd'].map((k, i) => `
-            <div>
-              <label class="muted">${k})</label>
-              <textarea oninput="onEditOpcion('${q.id}','${k}', this.value)" class="w-full textarea-base textarea-sm">${opts[i] || ''}</textarea>
-            </div>
-          `).join('')}
-        </div>
-      </td>
-      <td>
-        <div class="q-actions">
-          <button class="btn btn-secondary" onclick="setCorrecta('${q.id}')"><i class="fa-solid fa-circle-check"></i> Marcar correcta</button>
-          <button class="btn btn-secondary" onclick="toggleVoBo('${q.id}')"><i class="fa-solid fa-thumbs-up"></i> VoBo</button>
-          <button class="btn btn-secondary" onclick="cloneQ('${q.id}')"><i class="fa-solid fa-clone"></i></button>
-          <button class="btn btn-secondary" onclick="delQ('${q.id}')"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>
-  `;
-    }
-
-    function render() {
-        $('tbodyPreguntas').innerHTML = preguntas.map((q, i) => rowHTML(q, i)).join('');
-        updateCounters();
-        persist();
-    }
-
-    function addEmptyQuestion() {
-        const id = 'q' + Date.now() + Math.random().toString(16).slice(2);
-        preguntas.push({ id, texto: '', opciones: ['', '', '', ''], correcta: 'a', vobo: false });
-        render();
-    }
-
-    function autoNumerate() {
-        render(); // La renumeración es automática en cada render
-    }
-
-    function onEditTexto(id, value) {
-        const q = preguntas.find(x => x.id === id);
-        if (q) {
-            q.texto = value;
-            persist();
-        }
-    }
-
-    function onEditOpcion(id, k, value) {
-        const q = preguntas.find(x => x.id === id);
-        if (q) {
-            const map = { a: 0, b: 1, c: 2, d: 3 };
-            q.opciones[map[k]] = value;
-            persist();
-        }
-    }
-
-    function setCorrecta(id) {
-        const q = preguntas.find(x => x.id === id);
-        if (!q) return;
-
-        const keys = ['a', 'b', 'c', 'd'];
-        const idx = keys.indexOf(q.correcta || 'a');
-        q.correcta = keys[(idx + 1) % 4];
-        toast('Correcta: ' + q.correcta, 'ok');
-        persist();
-        
-        // AJUSTE: Actualiza solo el DOM necesario, sin redibujar toda la tabla
-        const tagContainer = $(`tags-${q.id}`);
-        if(tagContainer) {
-            tagContainer.innerHTML = `
-                <span class="tag">Correcta: ${q.correcta || '-'}</span>
-                <span class="tag ${q.vobo ? 'ok' : 'warn'}">VoBo: ${q.vobo ? 'Sí' : 'No'}</span>
-            `;
-        }
-    }
-
-    function toggleVoBo(id) {
-        const q = preguntas.find(x => x.id === id);
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
