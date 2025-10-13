@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ec0301-generator
+    env: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /api/health
