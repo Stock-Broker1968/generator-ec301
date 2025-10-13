@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evaluación de Satisfacción - EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap}
+    .section-questions{border:2px solid var(--border);border-radius:10px;padding:1.5rem;margin:1rem 0;background:#fff}
+    .section-title{color:var(--secondary);font-weight:bold;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+    .question-item{display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0}
+    .question-item:last-child{border-bottom:none}
+    .question-checkbox{width:18px;height:18px;cursor:pointer}
+    .question-text{flex:1;font-size:.95rem;line-height:1.4}
+    .selected-count{background:var(--primary);color:#fff;padding:.2rem .6rem;border-radius:20px;font-size:.8rem;font-weight:700}
+    .preview-section{background:#f8f9fa;border:2px solid var(--border);border-radius:10px;padding:1.5rem;margin:1rem 0}
+    .scale-info{background:rgba(255,107,53,.1);border:2px solid var(--primary);border-radius:8px;padding:1rem;margin:1rem 0}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <h1><i class="fa-solid fa-face-smile" style="color:#FF6B35"></i> Evaluación de Satisfacción</h1>
+        <div class="toolbar">
+          <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+          <button class="btn btn-secondary" onclick="loadFromCarta()"><i class="fa-solid fa-download"></i> Cargar datos de Carta</button>
+          <button class="btn btn-primary" onclick="previewPDF()"><i class="fa-solid fa-eye"></i> Vista previa</button>
+          <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF</button>
+          <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- PASO 1: Formulario del Encabezado -->
+    <div class="card">
+      <h2 class="section-title">Paso 1: Datos del Curso</h2>
+      <p style="color:var(--muted)">Complete la información que aparecerá en el encabezado de la evaluación.</p>
+      
+      <div class="grid">
+        <input id="nombreCurso" placeholder="Nombre del Curso-Taller" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+        <input id="nombreInstructor" placeholder="Nombre del instructor" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+        <input id="lugarImparticion" placeholder="Lugar de Impartición" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+        <div class="flex" style="width:100%">
+          <input id="duracionCurso" placeholder="Duración del curso" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+          <input id="horario" placeholder="Horario" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+          <input id="fechaImparticion" placeholder="Fecha de impartición" style="padding:.8rem;border:2px solid var(--border);border-radius:8px">
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: Selección de Preguntas -->
+    <div class="card">
+      <h2 class="section-title">Paso 2: Selección de Preguntas</h2>
+      <p style="color:var(--muted)">Seleccione las preguntas que desea incluir en la evaluación. Por defecto están todas marcadas.</p>
+
+      <div class="scale-info">
+        <h3><i class="fa-solid fa-star"></i> Escala de Evaluación</h3>
+        <p><strong>Excelente (10)</strong> | <strong>Bueno (8-9)</strong> | <strong>Regular (6-7)</strong> | <strong>Malo/Deficiente (5)</strong></p>
+      </div>
+
+      <!-- Sección: De las características del evento -->
+      <div class="section-questions">
+        <div class="section-title">
+          <i class="fa-solid fa-calendar-check"></i>
+          De las características del evento
+          <span class="selected-count" id="count-evento">2 seleccionadas</span>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-evento-1" checked onchange="updateCounts()">
+          <label for="q-evento-1" class="question-text">El curso estuvo bien organizado (agenda, tiempos, logística)</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-evento-2" checked onchange="updateCounts()">
+          <label for="q-evento-2" class="question-text">La inscripción y el acceso fueron ágiles</label>
+        </div>
+      </div>
+
+      <!-- Sección: Del contenido del curso -->
+      <div class="section-questions">
+        <div class="section-title">
+          <i class="fa-solid fa-book-open"></i>
+          Del contenido del curso
+          <span class="selected-count" id="count-contenido">3 seleccionadas</span>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-contenido-1" checked onchange="updateCounts()">
+          <label for="q-contenido-1" class="question-text">Se cumplieron los objetivos del curso</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-contenido-2" checked onchange="updateCounts()">
+          <label for="q-contenido-2" class="question-text">Los temas fueron pertinentes para mi trabajo</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-contenido-3" checked onchange="updateCounts()">
+          <label for="q-contenido-3" class="question-text">Las actividades prácticas (casos, simulaciones) facilitaron el aprendizaje</label>
+        </div>
+      </div>
+
+      <!-- Sección: De las instalaciones -->
+      <div class="section-questions">
+        <div class="section-title">
+          <i class="fa-solid fa-building"></i>
+          De las instalaciones
+          <span class="selected-count" id="count-instalaciones">2 seleccionadas</span>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-instalaciones-1" checked onchange="updateCounts()">
+          <label for="q-instalaciones-1" class="question-text">Comodidad y disposición del mobiliario</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-instalaciones-2" checked onchange="updateCounts()">
+          <label for="q-instalaciones-2" class="question-text">Funcionamiento de equipo audiovisual</label>
+        </div>
+      </div>
+
+      <!-- Sección: Del desempeño del instructor -->
+      <div class="section-questions">
+        <div class="section-title">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          Del desempeño del instructor
+          <span class="selected-count" id="count-instructor">3 seleccionadas</span>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-instructor-1" checked onchange="updateCounts()">
+          <label for="q-instructor-1" class="question-text">Dominio del tema</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-instructor-2" checked onchange="updateCounts()">
+          <label for="q-instructor-2" class="question-text">Claridad en la explicación</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-instructor-3" checked onchange="updateCounts()">
+          <label for="q-instructor-3" class="question-text">Fomento de la participación y manejo de preguntas</label>
+        </div>
+      </div>
+
+      <!-- Sección: Del material didáctico -->
+      <div class="section-questions">
+        <div class="section-title">
+          <i class="fa-solid fa-file-text"></i>
+          Del material didáctico
+          <span class="selected-count" id="count-material">2 seleccionadas</span>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-material-1" checked onchange="updateCounts()">
+          <label for="q-material-1" class="question-text">Claridad y utilidad del manual/presentaciones</label>
+        </div>
+        <div class="question-item">
+          <input type="checkbox" class="question-checkbox" id="q-material-2" checked onchange="updateCounts()">
+          <label for="q-material-2" class="question-text">Calidad de los ejemplos y casos prácticos</label>
+        </div>
+      </div>
+
+      <!-- Resumen de selección -->
+      <div class="preview-section">
+        <h3><i class="fa-solid fa-chart-pie"></i> Resumen de Selección</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+          <div>Total de preguntas: <strong id="totalPreguntas">12</strong></div>
+          <div>Preguntas abiertas: <strong>3</strong> (fijas)</div>
+          <div>Tiempo estimado: <strong id="tiempoEstimado">8-12 min</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3: Vista Previa y Generación -->
+    <div class="card">
+      <h2 class="section-title">Paso 3: Generar PDF</h2>
+      <p style="color:var(--muted)">Revise los datos y genere la evaluación de satisfacción en formato PDF profesional.</p>
+      
+      <div style="display:flex;gap:1rem;align-items:center;justify-content:center;padding:2rem">
+        <button class="btn btn-secondary" onclick="previewPDF()" style="font-size:1.1rem;padding:1rem 2rem">
+          <i class="fa-solid fa-eye"></i> Vista Previa
+        </button>
+        <button class="btn btn-primary" onclick="generatePDF()" style="font-size:1.1rem;padding:1rem 2rem">
+          <i class="fa-solid fa-file-pdf"></i> Generar PDF Profesional
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CONSTANTES: Estructura de datos de preguntas
+    const PREGUNTAS_SATISFACCION = {
+      "De las características del evento": [
+        "El curso estuvo bien organizado (agenda, tiempos, logística)",
+        "La inscripción y el acceso fueron ágiles"
+      ],
+      "Del contenido del curso": [
+        "Se cumplieron los objetivos del curso",
+        "Los temas fueron pertinentes para mi trabajo",
+        "Las actividades prácticas (casos, simulaciones) facilitaron el aprendizaje"
+      ],
+      "De las instalaciones": [
+        "Comodidad y disposición del mobiliario",
+        "Funcionamiento de equipo audiovisual"
+      ],
+      "Del desempeño del instructor": [
+        "Dominio del tema",
+        "Claridad en la explicación",
+        "Fomento de la participación y manejo de preguntas"
+      ],
+      "Del material didáctico": [
+        "Claridad y utilidad del manual/presentaciones",
+        "Calidad de los ejemplos y casos prácticos"
+      ]
+    };
+
+    const PREGUNTAS_ABIERTAS = [
+      "¿Qué fue lo que más le gustó del curso?",
+      "¿Qué aspectos se podrían mejorar?",
+      "Comentarios y sugerencias"
+    ];
+
+    // UTILIDADES
+    const $ = id => document.getElementById(id);
+
+    function updateCounts() {
+      const counts = {
+        'evento': 0,
+        'contenido': 0,
+        'instalaciones': 0,
+        'instructor': 0,
+        'material': 0
+      };
+
+      // Contar checkboxes marcados por sección
+      Object.keys(counts).forEach(section => {
+        const checkboxes = document.querySelectorAll(`[id^="q-${section}"]`);
+        counts[section] = Array.from(checkboxes).filter(cb => cb.checked).length;
+        $(`count-${section}`).textContent = `${counts[section]} seleccionada${counts[section] !== 1 ? 's' : ''}`;
+      });
+
+      // Actualizar totales
+      const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+      $('totalPreguntas').textContent = total;
+      $('tiempoEstimado').textContent = total <= 6 ? '4-6 min' : total <= 10 ? '6-10 min' : '8-15 min';
+    }
+
+    function loadFromCarta() {
+      try {
+        const raw = localStorage.getItem('EC0301_CARTA');
+        if (!raw) { toast('No hay datos de Carta Descriptiva guardados', 'warn'); return; }
+        
+        const cd = JSON.parse(raw);
+        $('nombreCurso').value = cd.nombre || '';
+        $('nombreInstructor').value = cd.instructor || '';
+        $('lugarImparticion').value = cd.lugar || '';
+        $('duracionCurso').value = cd.duracion ? cd.duracion + ' horas' : '';
+        $('horario').value = cd.horario || '';
+        $('fechaImparticion').value = cd.fechas || '';
+        
+        toast('Datos cargados desde Carta Descriptiva', 'ok');
+      } catch {
+        toast('Error al cargar datos de la Carta', 'err');
+      }
+    }
+
+    function collectData() {
+      const encabezado = {
+        nombreCurso: $('nombreCurso').value,
+        nombreInstructor: $('nombreInstructor').value,
+        lugarImparticion: $('lugarImparticion').value,
+        duracionCurso: $('duracionCurso').value,
+        horario: $('horario').value,
+        fechaImparticion: $('fechaImparticion').value
+      };
+
+      const preguntasSeleccionadas = {};
+      
+      // Recopilar preguntas seleccionadas por sección
+      Object.keys(PREGUNTAS_SATISFACCION).forEach(seccion => {
+        const preguntasSeccion = [];
+        PREGUNTAS_SATISFACCION[seccion].forEach((pregunta, index) => {
+          const sectionKey = seccion.toLowerCase()
+            .replace('de las características del evento', 'evento')
+            .replace('del contenido del curso', 'contenido')  
+            .replace('de las instalaciones', 'instalaciones')
+            .replace('del desempeño del instructor', 'instructor')
+            .replace('del material didáctico', 'material');
+          
+          const checkbox = $(`q-${sectionKey}-${index + 1}`);
+          if (checkbox && checkbox.checked) {
+            preguntasSeccion.push(pregunta);
+          }
+        });
+        
+        if (preguntasSeccion.length > 0) {
+          preguntasSeleccionadas[seccion] = preguntasSeccion;
+        }
+      });
+
+      return { encabezado, preguntasSeleccionadas };
+    }
+
+    function previewPDF() {
+      const { encabezado, preguntasSeleccionadas } = collectData();
+      
+      // Validar datos mínimos
+      if (!encabezado.nombreCurso || !encabezado.nombreInstructor) {
+        toast('Complete al menos el nombre del curso e instructor', 'err');
+        return;
+      }
+
+      const totalPreguntas = Object.values(preguntasSeleccionadas).reduce((sum, arr) => sum + arr.length, 0);
+      if (totalPreguntas === 0) {
+        toast('Seleccione al menos una pregunta', 'err');
+        return;
+      }
+
+      // Generar vista previa en texto
+      let preview = `EVALUACIÓN DE SATISFACCIÓN\n\n`;
+      preview += `Curso: ${encabezado.nombreCurso}\n`;
+      preview += `Instructor: ${encabezado.nombreInstructor}\n`;
+      preview += `Lugar: ${encabezado.lugarImparticion}\n`;
+      preview += `Duración: ${encabezado.duracionCurso} | Horario: ${encabezado.horario}\n`;
+      preview += `Fecha: ${encabezado.fechaImparticion}\n\n`;
+      
+      preview += `ESCALA: Excelente (10) | Bueno (8-9) | Regular (6-7) | Malo/Deficiente (5)\n\n`;
+
+      Object.keys(preguntasSeleccionadas).forEach(seccion => {
+        preview += `${seccion.toUpperCase()}\n`;
+        preguntasSeleccionadas[seccion].forEach((pregunta, i) => {
+          preview += `${i + 1}. ${pregunta}\n   [  ] Excelente  [  ] Bueno  [  ] Regular  [  ] Malo\n\n`;
+        });
+        preview += '\n';
+      });
+
+      preview += 'PREGUNTAS ABIERTAS:\n';
+      PREGUNTAS_ABIERTAS.forEach((pregunta, i) => {
+        preview += `${i + 1}. ${pregunta}\n_________________________________\n\n`;
+      });
+
+      // Mostrar en nueva ventana
+      const win = window.open('', '_blank', 'width=800,height=600');
+      win.document.write(`
+        <html>
+          <head><title>Vista Previa - Evaluación de Satisfacción</title></head>
+          <body style="font-family:Arial;padding:2rem;line-height:1.5">
+            <pre style="white-space:pre-wrap">${preview}</pre>
+          </body>
+        </html>
+      `);
+      win.document.close();
+      
+      toast('Vista previa generada', 'ok');
+    }
+
+    function generatePDF() {
+      const { encabezado, preguntasSeleccionadas } = collectData();
+      
+      // Validar datos
+      if (!encabezado.nombreCurso || !encabezado.nombreInstructor) {
+        toast('Complete los datos del encabezado', 'err');
+        return;
+      }
+
+      const totalPreguntas = Object.values(preguntasSeleccionadas).reduce((sum, arr) => sum + arr.length, 0);
+      if (totalPreguntas === 0) {
+        toast('Seleccione al menos una pregunta', 'err');
+        return;
+      }
+
+      // Llamar al backend para generar PDF real
+      generatePDFBackend(encabezado, preguntasSeleccionadas);
+    }
+
+    async function generatePDFBackend(encabezado, preguntasSeleccionadas) {
+      try {
+        toast('Generando PDF profesional...', 'info');
+        
+        const response = await fetch('/api/generate-satisfaction-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            encabezado,
+            preguntasSeleccionadas,
+            preguntasAbiertas: PREGUNTAS_ABIERTAS
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error en la generación del PDF');
+        }
+
+        // Descargar el PDF
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Evaluacion_Satisfaccion_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        toast('PDF generado y descargado exitosamente', 'ok');
+      } catch (error) {
+        console.error('Error:', error);
+        toast('Error al generar PDF. Usando versión de respaldo...', 'warn');
+        
+        // Respaldo: generar texto plano
+        generateTextFallback(encabezado, preguntasSeleccionadas);
+      }
+    }
+
+    function generateTextFallback(encabezado, preguntasSeleccionadas) {
+      let content = `EVALUACIÓN DE SATISFACCIÓN\n\n`;
+      content += `Nombre del Curso-Taller: ${encabezado.nombreCurso}\n`;
+      content += `Nombre del instructor: ${encabezado.nombreInstructor}\n`;
+      content += `Lugar de Impartición: ${encabezado.lugarImparticion}\n`;
+      content += `Duración del curso: ${encabezado.duracionCurso}\n`;
+      content += `Horario: ${encabezado.horario}\n`;
+      content += `Fecha de impartición: ${encabezado.fechaImparticion}\n\n`;
+      
+      content += `INSTRUCCIONES: Marque con X la opción que mejor refleje su opinión\n`;
+      content += `ESCALA: Excelente (10) | Bueno (8-9) | Regular (6-7) | Malo/Deficiente (5)\n\n`;
+
+      Object.keys(preguntasSeleccionadas).forEach(seccion => {
+        content += `${seccion.toUpperCase()}\n${'='.repeat(seccion.length)}\n`;
+        content += `PREGUNTA\tExcelente\tBueno\tRegular\tMalo\n\n`;
+        
+        preguntasSeleccionadas[seccion].forEach((pregunta, i) => {
+          content += `${i + 1}. ${pregunta}\t[  ]\t[  ]\t[  ]\t[  ]\n\n`;
+        });
+        content += '\n';
+      });
+
+      content += 'PREGUNTAS ABIERTAS\n==================\n';
+      PREGUNTAS_ABIERTAS.forEach((pregunta, i) => {
+        content += `${i + 1}. ${pregunta}\n`;
+        content += '_'.repeat(60) + '\n';
+        content += '_'.repeat(60) + '\n\n';
+      });
+
+      // Descargar como texto
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Evaluacion_Satisfaccion_${new Date().toISOString().slice(0,10)}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      toast('Archivo de respaldo generado. Para PDF profesional, configure el backend.', 'warn');
+    }
+
+    function markComplete() {
+      parent?.postMessage({ deliverable: 7, progress: 100 }, '*');
+      toast('Evaluación de Satisfacción marcada al 100%', 'ok');
+    }
+
+    function toast(msg, type = 'info') {
+      console.log(msg);
+      try { window.parent?.toast?.(msg, type); } catch {}
+    }
+
+    // INICIALIZACIÓN
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCounts();
+      
+      // Auto-guardar cambios
+      ['nombreCurso', 'nombreInstructor', 'lugarImparticion', 'duracionCurso', 'horario', 'fechaImparticion'].forEach(id => {
+        $(id).addEventListener('input', () => {
+          // Guardar en localStorage para persistencia
+          const data = collectData();
+          localStorage.setItem('EC0301_EVAL_SATISFACCION', JSON.stringify(data));
+        });
+      });
+    });
+  </script>
+
+  <script src="/assets/common.js"></script>
+</body>
+</html>
