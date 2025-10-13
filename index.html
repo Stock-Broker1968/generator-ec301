@@ -1117,10 +1117,143 @@
                 </div>
             </div>
 
-            <!-- Element 1: Carta Descriptiva -->
-            <div id="element1Content" class="element-content active">
-                <h3><i class="fas fa-file-alt"></i> Elemento 1: Carta Descriptiva del Curso</h3>
+            <!-- Element 1: Carta Descriptiva MEJORADA -->
+<div id="element1Content" class="element-content active">
+    <div style="background: linear-gradient(135deg, var(--primary-color), #FF8A5C); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem;">
+            <i class="fas fa-file-alt"></i> Elemento 1: Carta Descriptiva EC0301
+        </h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">
+            Sistema completo con Taxonomía de Bloom, 4 dominios de aprendizaje y Agente IA especializado
+        </p>
+        
+        <!-- Opciones de acceso -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem;">
+            <!-- Modo Básico -->
+            <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 8px; border: 2px solid rgba(255,255,255,0.3);">
+                <h4 style="margin-bottom: 1rem;">
+                    <i class="fas fa-edit"></i> Modo Básico
+                </h4>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.9;">
+                    Formulario simple con campos esenciales
+                </p>
+                <button class="btn-mode" onclick="showBasicMode()" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                    Usar Modo Básico
+                </button>
+            </div>
+            
+            <!-- Modo Completo -->
+            <div style="background: rgba(255,255,255,0.25); padding: 1.5rem; border-radius: 8px; border: 2px solid white;">
+                <h4 style="margin-bottom: 1rem;">
+                    <i class="fas fa-graduation-cap"></i> Modo Completo EC0301
+                </h4>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.9;">
+                    Sistema completo con IA, validaciones y cumplimiento 100%
+                </p>
+                <button class="btn-mode" onclick="openCartaCompleta()" style="background: white; color: var(--primary-color); border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <i class="fas fa-rocket"></i> Abrir Sistema Completo
+                </button>
+            </div>
+        </div>
+        
+        <!-- Preview de características -->
+        <div style="margin-top: 2rem; text-align: left; background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
+            <h5 style="margin-bottom: 1rem; text-align: center;">
+                <i class="fas fa-star"></i> Características del Sistema Completo:
+            </h5>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.9rem;">
+                <div>
+                    <i class="fas fa-brain" style="margin-right: 0.5rem;"></i>
+                    Taxonomía de Bloom integrada
+                </div>
+                <div>
+                    <i class="fas fa-cogs" style="margin-right: 0.5rem;"></i>
+                    4 dominios de aprendizaje EC0301
+                </div>
+                <div>
+                    <i class="fas fa-robot" style="margin-right: 0.5rem;"></i>
+                    Agente IA especializado
+                </div>
+                <div>
+                    <i class="fas fa-check-double" style="margin-right: 0.5rem;"></i>
+                    Validación automática CONOCER
+                </div>
+                <div>
+                    <i class="fas fa-clock" style="margin-right: 0.5rem;"></i>
+                    Cronología detallada automática
+                </div>
+                <div>
+                    <i class="fas fa-file-pdf" style="margin-right: 0.5rem;"></i>
+                    PDF listo para evaluador
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modo Básico (versión simplificada) -->
+    <div id="basicCartaMode" style="display: none;">
+        <div style="background: var(--background-color); padding: 2rem; border-radius: 12px;">
+            <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                <i class="fas fa-edit"></i> Carta Descriptiva - Modo Básico
+                <button onclick="openCartaCompleta()" style="float: right; background: var(--primary-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-arrow-up"></i> Cambiar a Modo Completo
+                </button>
+            </h3>
+            
+            <div class="form-grid">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre del Curso *</label>
+                        <input type="text" id="basicCourseName" placeholder="Ej: Liderazgo Efectivo" onchange="updateProgress(1, 25)">
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (horas) *</label>
+                        <input type="number" id="basicCourseDuration" placeholder="40" onchange="updateProgress(1, 50)">
+                    </div>
+                </div>
                 
+                <div class="form-group">
+                    <label>
+                        Objetivo General
+                        <button class="ai-assistant" onclick="aiAssistBasic('objetivo')">
+                            <i class="fas fa-robot"></i> Generar con IA
+                        </button>
+                    </label>
+                    <textarea id="basicGeneralObjective" placeholder="Al finalizar el curso, el participante será capaz de..." onchange="updateProgress(1, 75)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Contenido Temático Principal
+                        <button class="ai-assistant" onclick="aiAssistBasic('contenido')">
+                            <i class="fas fa-robot"></i> Estructurar Contenido
+                        </button>
+                    </label>
+                    <textarea id="basicThematicContent" placeholder="Módulo 1: ...\nMódulo 2: ...\nMódulo 3: ..." onchange="updateProgress(1, 100)"></textarea>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: rgba(255, 107, 53, 0.1); border-radius: 8px;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">¿Necesita una Carta Descriptiva completa EC0301?</h4>
+                    <p style="margin-bottom: 1rem;">El sistema completo incluye todos los elementos requeridos por CONOCER</p>
+                    <button onclick="openCartaCompleta()" style="background: var(--primary-color); color: white; border: none; padding: 1rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-rocket"></i> Acceder al Sistema Completo EC0301
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div style="text-align: right; margin-top: 2rem;">
+        <button class="btn btn-secondary" onclick="hideBasicMode()" id="backToOptions" style="display: none;">
+            <i class="fas fa-arrow-left"></i> Ver Opciones
+        </button>
+        <button class="btn btn-primary" onclick="saveBasicCarta()" id="saveBasicBtn" style="display: none;">
+            <i class="fas fa-save"></i> Guardar Carta Básica
+        </button>
+    </div>
+</div>
+           
                 <div class="form-group">
                     <label>
                         Información General del Curso
