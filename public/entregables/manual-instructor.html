@@ -1,0 +1,53 @@
+// 1) IA para propuestas de instructor
+app.post('/api/ia-generate-instructor', async (req, res) => {
+  const { prompt } = req.body;
+  try {
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-4',
+      messages:[{role:'system',content:prompt}]
+    });
+    // Supongamos respuesta formateada JSON con intro y sugerencias
+    const content = completion.data.choices[0].message.content;
+    const { intro, sug } = JSON.parse(content);
+    res.json({ intro, sug });
+  } catch (e) {
+    res.status(500).json({ error:e.message });
+  }
+});
+
+// 2) Ensamblar manual instructor + anexos
+app.post('/api/generate-instructor-pdf', async (req, res) => {
+  const { header, content, anexos } = req.body;
+  // Crear PDF del manual con fpdf2
+  const pdf = new FPDF({orientation:'P',unit:'mm',format:'A4'});
+  pdf.addPage();
+  pdf.setFont('Arial','B',16).text('Manual del Instructor', 10, 10);
+  pdf.setFont('Arial','',12);
+  pdf.text(`Curso: ${header.nombre}`,10,18);
+  pdf.text(`Instructor: ${header.instructor}`,10,24);
+  // Insertar contenido HTML como texto plano
+  const text = [content.intro, content.req, content.sug, content.src]
+    .map(html=> html.replace(/<[^>]+>/g,'').trim()).join('\n\n');
+  pdf.setY(30).multiCell(0,6,text);
+
+  // Guardar PDF temporal
+  const bufferMain = pdf.output('arraybuffer');
+  const tmpMainPath = '/tmp/manual_instructor.pdf';
+  require('fs').writeFileSync(tmpMainPath, Buffer.from(bufferMain));
+
+  // Fusionar con anexos (PyPDF2 en Python o PDF-Lib en Node)
+  // Ejemplo con PDF-Lib:
+  const { PDFDocument } = require('pdf-lib');
+  const mainPdf = await PDFDocument.load(Buffer.from(bufferMain));
+  for (const url of anexos){
+    // Fetch each anexos PDF
+    const resp = await fetch(url.replace('/entregables','/public/entregables'));
+    const arr = await resp.arrayBuffer();
+    const annexPdf = await PDFDocument.load(arr);
+    const pages = await mainPdf.copyPages(annexPdf, annexPdf.getPageIndices());
+    pages.forEach(p=> mainPdf.addPage(p));
+  }
+  const mergedBytes = await mainPdf.save();
+  res.setHeader('Content-Type','application/pdf');
+  res.send(Buffer.from(mergedBytes));
+});
