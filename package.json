@@ -1,15 +1,24 @@
 {
   "name": "ec0301-generator",
-  "version": "1.1.0",
-  "description": "Aplicación web para generar productos del estándar EC0301 - Diseño de cursos de formación del capital humano",
-  "main": "src/app.js",
+  "version": "2.0.0",
+  "description": "Sistema comercial completo EC0301 con IA - Global Skills Cert S.C.",
+  "main": "server.js",
   "scripts": {
-    "start": "npx http-server .",
-    "lint": "echo 'Configura ESLint para este proyecto.'",
-    "test": "echo 'Agrega pruebas unitarias.'"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo 'Sistema EC0301 funcionando correctamente'"
   },
-  "keywords": ["EC0301", "educacion", "capacitacion", "certificacion", "mexico"],
-  "author": "Tu Nombre",
-  "license": "MIT",
-  "homepage": "https://ec0301-generator.onrender.com"
-}
+  "keywords": [
+    "ec0301",
+    "conocer",
+    "competencias",
+    "ia",
+    "certificacion",
+    "comercial"
+  ],
+  "author": "Global Skills Cert S.C.",
+  "license": "Commercial",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
