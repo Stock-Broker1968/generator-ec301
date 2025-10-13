@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lista de Verificación de Requerimientos - EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <style>
+    .toolbar{display:flex;gap:1rem;margin-bottom:1rem}
+    .section{margin:1rem 0}
+    .section-title{font-weight:bold;color:var(--secondary);margin-bottom:.5rem}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid var(--border);padding:.8rem;text-align:left}
+    th{background:#f9fafb}
+    textarea{width:100%;padding:.5rem;border:1px solid var(--border);border-radius:6px}
+    input[type=checkbox]{width:18px;height:18px}
+    .add-btn{margin-top:.5rem}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+      <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF</button>
+      <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
+    </div>
+
+    <h2 class="section-title">Lista de Verificación de Requerimientos</h2>
+    <div>
+      <strong>Curso:</strong> <span id="rv_curso"></span><br>
+      <strong>Instructor:</strong> <span id="rv_instructor"></span><br>
+      <strong>Lugar:</strong> <span id="rv_lugar"></span><br>
+      <strong>Fecha:</strong> <span id="rv_fecha"></span>
+    </div>
+
+    <!-- Secciones -->
+    <div id="sectionsContainer">
+      <!-- Secciones generadas por JS -->
+    </div>
+  </div>
+
+  <script>
+    const KEY_CARTA='EC0301_CARTA';
+    const SECTIONS = [
+      { key:'instalaciones', title:'Instalaciones, mobiliario y distribución' },
+      { key:'equipo', title:'Equipo de apoyo y distribución' },
+      { key:'mats', title:'Materiales de apoyo' },
+      { key:'rh', title:'Requerimientos humanos' },
+      { key:'otros', title:'Otros requerimientos' }
+    ];
+
+    function loadHeader(){
+      const d=JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      ['curso','instructor','lugar','fecha'].forEach(k=>{
+        document.getElementById(`rv_${k}`).textContent = d[k]||'';
+      });
+    }
+
+    function loadRequirements(){
+      const d=JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      const container=document.getElementById('sectionsContainer');
+      container.innerHTML='';
+      SECTIONS.forEach(sec=>{
+        const div=document.createElement('div');
+        div.className='section';
+        div.innerHTML=`
+          <h3 class="section-title">${sec.title}</h3>
+          <table>
+            <thead><tr><th>Descripción</th><th>Existe</th><th>No existe</th><th>Nota</th></tr></thead>
+            <tbody id="tb_${sec.key}"></tbody>
+          </table>
+          <button class="btn btn-secondary add-btn" onclick="addReq('${sec.key}')">
+            <i class="fa-solid fa-plus"></i> Añadir requerimiento
+          </button>
+        `;
+        container.appendChild(div);
+        const tbody=div.querySelector('tbody');
+        (d[sec.key]||[]).forEach(req=>{
+          addReqRow(sec.key, req);
+        });
+      });
+    }
+
+    function addReq(secKey){
+      addReqRow(secKey, '');
+    }
+
+    function addReqRow(secKey, text){
+      const tb=document.getElementById(`tb_${secKey}`);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td><textarea onchange="saveDraft()">${text}</textarea></td>
+        <td><input type="checkbox" onchange="saveDraft()"></td>
+        <td><input type="checkbox" onchange="saveDraft()"></td>
+        <td><textarea onchange="saveDraft()"></textarea></td>
+      `;
+      tb.appendChild(tr);
+    }
+
+    function collectData(){
+      const d=JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      const list={ header:{
+        curso:d.nombre, instructor:d.instructor, lugar:d.lugar, fecha:d.fecha
+      }};
+      SECTIONS.forEach(sec=>{
+        const rows=Array.from(document.getElementById(`tb_${sec.key}`).rows);
+        list[sec.key]=rows.map(r=> ({
+          desc: r.cells[0].querySelector('textarea').value,
+          existe: r.cells[1].querySelector('input').checked,
+          noExiste: r.cells[2].querySelector('input').checked,
+          nota: r.cells[3].querySelector('textarea').value
+        }));
+      });
+      return list;
+    }
+
+    function generatePDF(){
+      const data=collectData();
+      fetch('/api/generate-checklist-pdf',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data)
+      }).then(r=>r.blob()).then(blob=>{
+        const url=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=url; a.download=`Verificacion_Requerimientos_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.click();
+      });
+    }
+
+    function markComplete(){ parent?.postMessage({deliverable:9,progress:100},'*'); }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      loadHeader(); loadRequirements();
+    });
+
+    function saveDraft(){
+      const d=JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      SECTIONS.forEach(sec=>{
+        const rows=Array.from(document.getElementById(`tb_${sec.key}`).rows);
+        d[sec.key]=rows.map(r=> r.cells[0].querySelector('textarea').value );
+      });
+      localStorage.setItem(KEY_CARTA, JSON.stringify(d));
+    }
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
