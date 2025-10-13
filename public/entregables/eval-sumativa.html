@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evaluación Sumativa - EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap}
+    .section{background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.08);padding:1.5rem;margin:1rem 0}
+    .field-group{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+    textarea,input,select{width:100%;padding:.8rem;border:2px solid var(--border);border-radius:8px}
+    .reactivos{margin:1rem 0}
+    .reactivo{border-bottom:1px solid var(--border);padding:.75rem 0;display:grid;grid-template-columns:40px 1fr 80px;gap:.5rem;align-items:center}
+    .reactivo:last-child{border-bottom:none}
+    .actions{display:flex;gap:.5rem}
+    .actions button{padding:.4rem .6rem}
+    .preview{background:#f1f5f9;border:2px solid var(--border);border-radius:10px;padding:1rem;margin:1rem 0}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <h1><i class="fa-solid fa-file-circle-check" style="color:#FF6B35"></i> Evaluación Sumativa</h1>
+        <div class="toolbar">
+          <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+          <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF</button>
+          <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Encabezado -->
+    <div class="section">
+      <h2 class="section-title">1) Datos del Curso</h2>
+      <div class="field-group">
+        <input id="enc_curso" placeholder="Nombre del Curso-Taller">
+        <input id="enc_instructor" placeholder="Nombre del instructor">
+        <input id="enc_lugar" placeholder="Lugar de Impartición">
+        <input id="enc_fecha" placeholder="Fecha de impartición">
+      </div>
+      <div class="field-group">
+        <input id="cfg_objetivo" placeholder="Objetivo del instrumento">
+        <input id="cfg_tiempo" type="number" placeholder="Tiempo (min)">
+        <input id="cfg_valor" type="number" placeholder="Valor por reactivo">
+      </div>
+    </div>
+
+    <!-- Reactivos -->
+    <div class="section reactivos">
+      <h2 class="section-title">2) Reactivos</h2>
+      <button class="btn btn-secondary" onclick="addReactivo()"><i class="fa-solid fa-plus"></i> Agregar Pregunta</button>
+      <div id="listaReactivos">
+        <!-- Reactivos generados aquí -->
+      </div>
+    </div>
+
+    <!-- Vista previa -->
+    <div class="preview">
+      <h3><i class="fa-solid fa-eye"></i> Vista previa</h3>
+      <pre id="previewContent" style="white-space:pre-wrap"></pre>
+    </div>
+  </div>
+
+  <script>
+    const PREGUNTAS_EJEMPLO = [
+      {
+        pregunta: "¿Qué organismo emite las \"40 Recomendaciones\" que constituyen el estándar internacional contra el LD/FT?",
+        opciones: { a:"FMI", b:"GAFI", c:"Banco Mundial", d:"ONU" },
+        correcta: "b"
+      },
+      {
+        pregunta: "Conforme a la LFPIORPI, los reportes de operaciones inusuales deben enviarse a:",
+        opciones: { a:"SAT", b:"CNBV", c:"UIF", d:"Banxico" },
+        correcta: "c"
+      }
+      // agregar más según plantilla EC0217.01
+    ];
+    let reactivos = [];
+
+    function $(id){ return document.getElementById(id); }
+
+    function addReactivo(data){
+      const r = data || { pregunta:"", opciones:{a:"",b:"",c:"",d:""}, correcta:"a" };
+      reactivos.push(r);
+      renderReactivos();
+    }
+
+    function deleteReactivo(i){
+      reactivos.splice(i,1);
+      renderReactivos();
+    }
+
+    function renderReactivos(){
+      const container = $('listaReactivos');
+      container.innerHTML = "";
+      reactivos.forEach((r,i)=>{
+        const div = document.createElement('div');
+        div.className = "reactivo";
+        div.innerHTML = `
+          <div>${i+1}.</div>
+          <textarea onchange="updateReactivo(${i}, 'pregunta', this.value)" placeholder="Pregunta">${r.pregunta}</textarea>
+          <div class="actions">
+            <button onclick="cloneReactivo(${i})"><i class="fa-solid fa-copy"></i></button>
+            <button onclick="deleteReactivo(${i})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+          <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem">
+            ${['a','b','c','d'].map(key=>`
+              <div>
+                <label>${key})</label>
+                <input onchange="updateReactivo(${i}, 'opciones.${key}', this.value)" placeholder="Opción ${key}" value="${r.opciones[key]}">
+                <div>
+                  <input type="radio" name="correcta${i}" ${r.correcta===key?'checked':''} onclick="updateReactivo(${i}, 'correcta', '${key}')"> Correcta
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      preview();
+    }
+
+    function updateReactivo(i, path, value){
+      const keys = path.split('.');
+      let obj = reactivos[i];
+      for(let k=0;k<keys.length-1;k++){
+        obj = obj[keys[k]];
+      }
+      obj[keys[keys.length-1]] = value;
+      preview();
+    }
+
+    function cloneReactivo(i){
+      const copy = JSON.parse(JSON.stringify(reactivos[i]));
+      reactivos.splice(i+1,0,copy);
+      renderReactivos();
+    }
+
+    function preview(){
+      let out = `Cuestionario - Evaluación Sumativa\n\n`;
+      out += `Curso: ${$('enc_curso').value}\nInstructor: ${$('enc_instructor').value}\nLugar: ${$('enc_lugar').value}\nFecha: ${$('enc_fecha').value}\n\n`;
+      out += `Objetivo: ${$('cfg_objetivo').value}\nTiempo: ${$('cfg_tiempo').value} min | Valor: ${$('cfg_valor').value} pt/s\n\n`;
+      reactivos.forEach((r,i)=>{
+        out += `${i+1}. ${r.pregunta}\n`;
+        ['a','b','c','d'].forEach(key=>{
+          out += `   ${key}) ${r.opciones[key]}\n`;
+        });
+        out += '\n';
+      });
+      out += `\n--- Hoja de Respuestas ---\n\n`;
+      reactivos.forEach((r,i)=>{
+        out += `${i+1}. ${r.correcta}) ${r.opciones[r.correcta]}\n`;
+      });
+      $('previewContent').textContent = out;
+    }
+
+    function generatePDF(){
+      const datos = {
+        encabezado:{
+          curso:$('enc_curso').value,
+          instructor:$('enc_instructor').value,
+          lugar:$('enc_lugar').value,
+          fecha:$('enc_fecha').value
+        },
+        configuracion:{
+          objetivo:$('cfg_objetivo').value,
+          tiempo:parseInt($('cfg_tiempo').value),
+          valor_reactivo:parseInt($('cfg_valor').value)
+        },
+        reactivos
+      };
+      fetch('/api/generate-sumativa-pdf',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(datos)
+      }).then(res=>res.blob()).then(blob=>{
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;
+        a.download=`Evaluacion_Sumativa_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.click();
+      });
+    }
+
+    function markComplete(){
+      parent?.postMessage({deliverable:5,progress:100},'*');
+      alert('Evaluación Sumativa marcada al 100%');
+    }
+
+    // Cargar preguntas de ejemplo
+    document.addEventListener('DOMContentLoaded',()=>{
+      PREGUNTAS_EJEMPLO.forEach(q=>addReactivo(q));
+    });
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
