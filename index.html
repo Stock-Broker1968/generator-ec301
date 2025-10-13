@@ -1,46 +1,1086 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Aplicación web para generar productos del estándar EC0301 - Diseño de cursos de formación del capital humano">
-  <title>EC0301 Generator | Certificación Capital Humano</title>
-  <link rel="stylesheet" href="src/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC0301 Generator - Global Skills Cert S.C.</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #1E3A8A;
+            --accent-color: #FED7AA;
+            --background-color: #F1F5F9;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --error-color: #EF4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-color);
+        }
+
+        /* LOADING SCREEN */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .loading-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* PAGES SYSTEM */
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .demo-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* LANDING PAGE */
+        .hero {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(30, 58, 138, 0.05));
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 3px solid var(--primary-color);
+        }
+
+        .pricing-header {
+            background: linear-gradient(135deg, var(--primary-color), #FF8A5C);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        /* DASHBOARD */
+        .dashboard-header {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-info h2 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .key-status {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .key-status i {
+            color: var(--primary-color);
+        }
+
+        /* PROGRESS SECTION */
+        .progress-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .progress-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .progress-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background: var(--background-color);
+        }
+
+        .progress-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: var(--border-color);
+            height: 10px;
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        /* ELEMENTS NAVIGATION */
+        .elements-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .element-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .element-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .element-card.active {
+            border-color: var(--primary-color);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .element-card.completed {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .element-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .element-card.completed i {
+            color: var(--white);
+        }
+
+        /* ELEMENT FORMS */
+        .element-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .element-content.active {
+            display: block;
+        }
+
+        .element-content h3 {
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .form-group {
+            margin: 1.5rem 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* AI ASSISTANT */
+        .ai-assistant {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            transition: var(--transition);
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.05);
+        }
+
+        /* TABS SYSTEM */
+        .tabs-nav {
+            display: flex;
+            background: var(--background-color);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* AUDIT SECTION */
+        .audit-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .audit-score {
+            margin: 2rem 0;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .audit-details {
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .audit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 0.5rem 0;
+            background: var(--background-color);
+        }
+
+        .audit-item.complete {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .audit-item.incomplete {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* SUCCESS MESSAGES */
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs-nav {
+                flex-direction: column;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .elements-nav {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PAYMENT STYLES */
+        .payment-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .payment-summary {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        /* REGISTRATION STYLES */
+        .registration-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .access-key-display {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .key-box {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .registration-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>EC0301 Generator</h1>
-    <p>Tu asistente inteligente para la certificación en diseño de cursos</p>
-  </header>
-  <main>
-    <section>
-      <h2>¿Qué es un Estándar de Competencia?</h2>
-      <p>Un Estándar de Competencia (EC) describe los conocimientos, habilidades y actitudes para funciones productivas. El <strong>EC0301</strong> se enfoca en el diseño de cursos presenciales grupales.</p>
-    </section>
-    <form id="ec-form">
-      <label for="name">Nombre completo *</label>
-      <input type="text" id="name" name="name" required>
-      <label for="email">Correo electrónico *</label>
-      <input type="email" id="email" name="email" required>
-      <label for="whatsapp">WhatsApp *</label>
-      <input type="text" id="whatsapp" name="whatsapp" required>
-      <div>
-        <input type="checkbox" id="terms" required>
-        <label for="terms">Confirmo que los datos proporcionados son correctos y acepto los términos del servicio.</label>
-      </div>
-      <button type="submit">Enviar</button>
-    </form>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <i class="fas fa-graduation-cap loading-icon"></i>
+            <h2>EC0301 Generator</h2>
+            <p>Inicializando sistema profesional...</p>
+        </div>
+    </div>
 
-    <section id="progress">
-      <h2>Progreso general: 0% completado</h2>
-      <!-- Aquí se mostrarían los pasos y avances -->
-    </section>
-    <!-- Otras secciones como Carta Descriptiva, Instrumentos, Manuales -->
-    <!-- ...Mantén la estructura pero simplifica, elimina etiquetas y divs vacíos -->
-  </main>
-  <footer>
-    <small>EC0301 Generator © 2025. Proyecto abierto bajo licencia MIT.</small>
-  </footer>
-  <script src="src/app.js"></script>
-</body>
-</html>
+    <!-- Landing Page -->
+    <div id="landingPage" class="page active">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h1>EC0301 Generator</h1>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="demo-btn" onclick="goDirectToDashboard()">
+                            🚀 Acceso Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <h2>Sistema Automatizado para<br><span class="highlight">EC0301 CONOCER</span></h2>
+                <p>Genera automáticamente todos los productos requeridos para el Estándar de Competencia EC0301 con auditoría de cumplimiento 100% y asistencia de IA especializada.</p>
+                
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Licencia Completa</h3>
+                        <div class="price">$2,500 <span style="font-size: 1rem;">MXN</span></div>
+                        <p>Acceso completo por 3 meses</p>
+                    </div>
+                    <div style="padding: 2rem;">
+                        <ul style="list-style: none; margin: 1rem 0;">
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success-color);"></i>
+                                Carta Descriptiva automatizada
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success-color);"></i>
+                                Instrumentos de Evaluación IA
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success-color);"></i>
+                                Manuales completos
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success-color);"></i>
+                                Auditoría 100% cumplimiento
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success-color);"></i>
+                                PDF listos para evaluador
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="showPayment()" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-credit-card"></i> Adquirir Licencia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Global Skills Cert S.C.</h3>
+                        <p>EC0301 Solutions México</p>
+                        <p><i class="fas fa-envelope"></i> info@skillscert.com.mx</p>
+                        <p><i class="fas fa-phone"></i> +52 38822334</p>
+                        <p><i class="fas fa-mobile"></i> 2201669863</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Colonia Juárez, Ocoyoacac, Estado de México</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Global Skills Cert S.C. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Payment Page -->
+    <div id="paymentPage" class="page">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h1>EC0301 Generator</h1>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="demo-btn" onclick="goDirectToDashboard()">
+                            🚀 Acceso Demo
+                        </button>
+                        <button class="btn btn-secondary" onclick="showLanding()">
+                            <i class="fas fa-arrow-left"></i> Regresar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem;">
+            <div class="payment-container">
+                <h2 style="text-align: center; color: var(--secondary-color); margin-bottom: 2rem;">Proceso de Pago</h2>
+                
+                <div class="payment-summary">
+                    <h3>Resumen de Compra</h3>
+                    <div class="summary-item">
+                        <span>Licencia EC0301 Generator</span>
+                        <strong>$2,500 MXN</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Vigencia</span>
+                        <strong>3 meses</strong>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <strong>$2,500 MXN</strong>
+                    </div>
+                </div>
+
+                <form id="paymentForm" onsubmit="processPayment(event)">
+                    <div class="form-group">
+                        <label>Número de Tarjeta *</label>
+                        <input type="text" id="cardNumber" placeholder="4111 1111 1111 1111" required>
+                        <small style="color: var(--text-light);">Use: 4111 1111 1111 1111 para pruebas</small>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha de Expiración *</label>
+                            <input type="text" id="cardExpiry" placeholder="12/26" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV *</label>
+                            <input type="text" id="cardCVV" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre del Titular *</label>
+                        <input type="text" id="cardName" placeholder="Nombre completo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-lock"></i> Procesar Pago $2,500 MXN
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: rgba(255, 107, 53, 0.1); border-radius: var(--border-radius);">
+                    <h4 style="color: var(--primary-color);">🚀 Acceso Rápido de Prueba</h4>
+                    <p style="margin: 1rem 0;">¿Solo quieres probar la funcionalidad?</p>
+                    <button class="btn btn-success" onclick="goDirectToDashboard()">
+                        <i class="fas fa-rocket"></i> Ir Directo al Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Page -->
+    <div id="registrationPage" class="page">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h1>EC0301 Generator</h1>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="demo-btn" onclick="goDirectToDashboard()">
+                            🚀 Acceso Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="registration-container">
+                <h2 style="text-align: center; color: var(--secondary-color); margin-bottom: 1rem;">Registro de Usuario</h2>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Complete sus datos para acceder al sistema</p>
+                
+                <div class="access-key-display">
+                    <h3>Su Clave de Acceso:</h3>
+                    <div class="key-box">
+                        <span id="generatedKey">EC01-DEMO-2025</span>
+                        <button onclick="copyKey()" class="copy-btn" id="copyKeyBtn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p style="opacity: 0.9;">Válida hasta: <span id="keyExpiry">12 de enero de 2025</span></p>
+                </div>
+
+                <form class="registration-form" onsubmit="completeRegistration(event)">
+                    <div class="form-group">
+                        <label>Nombre Completo *</label>
+                        <input type="text" id="userName" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico *</label>
+                        <input type="email" id="userEmail" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp *</label>
+                        <input type="tel" id="userWhatsApp" placeholder="+52 123 456 7890" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Organización (Opcional)</label>
+                        <input type="text" id="userOrganization" placeholder="Nombre de su empresa u organización">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Clave de Acceso *</label>
+                        <input type="text" id="confirmKey" placeholder="EC01-XXXX-XXXX" required>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="acceptTerms" required>
+                            Acepto los términos y condiciones de uso
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-user-plus"></i> Registrarse y Acceder
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: rgba(255, 107, 53, 0.1); border-radius: var(--border-radius);">
+                    <h4 style="color: var(--primary-color);">🚀 Acceso Directo</h4>
+                    <p style="margin: 1rem 0;">¿Problemas con el registro?</p>
+                    <button class="btn btn-success" onclick="goDirectToDashboard()">
+                        <i class="fas fa-rocket"></i> Acceder Sin Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <div class="dashboard-header">
+            <div class="user-info">
+                <h2>Bienvenido, <span id="currentUserName">Usuario Demo</span></h2>
+                <div class="key-status">
+                    <i class="fas fa-key"></i>
+                    Clave: <span id="currentUserKey">EC01-DEMO-2025</span> | 
+                    Expira: <span id="currentKeyExpiry">12 de enero de 2025</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" onclick="showLanding()">
+                    <i class="fas fa-home"></i> Inicio
+                </button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Progress Overview -->
+            <div class="progress-section">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Progreso General del EC0301</h3>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h4>Carta Descriptiva</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress1" style="width: 0%;"></div>
+                        </div>
+                        <span id="progressText1">0% Completado</span>
+                    </div>
+                    <div class="progress-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h4>Instrumentos</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress2" style="width: 0%;"></div>
+                        </div>
+                        <span id="progressText2">0% Completado</span>
+                    </div>
+                    <div class="progress-card">
+                        <i class="fas fa-book"></i>
+                        <h4>Manuales</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress3" style="width: 0%;"></div>
+                        </div>
+                        <span id="progressText3">0% Completado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Elements Navigation -->
+            <div class="elements-nav">
+                <div class="element-card active" onclick="showElement(1)" id="elementCard1">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Elemento 1</h3>
+                    <h4>Carta Descriptiva</h4>
+                    <p>Diseña la estructura completa de tu curso</p>
+                    <span class="element-status" id="status1">🔴 Pendiente</span>
+                </div>
+                <div class="element-card" onclick="showElement(2)" id="elementCard2">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>Elemento 2</h3>
+                    <h4>Instrumentos de Evaluación</h4>
+                    <p>Crea instrumentos de conocimientos y habilidades</p>
+                    <span class="element-status" id="status2">🔴 Pendiente</span>
+                </div>
+                <div class="element-card" onclick="showElement(3)" id="elementCard3">
+                    <i class="fas fa-book"></i>
+                    <h3>Elemento 3</h3>
+                    <h4>Manuales del Curso</h4>
+                    <p>Desarrolla manuales del participante e instructor</p>
+                    <span class="element-status" id="status3">🔴 Pendiente</span>
+                </div>
+                <div class="element-card" onclick="showAudit()" id="auditCard">
+                    <i class="fas fa-search"></i>
+                    <h3>Auditoría IA</h3>
+                    <h4>Validación EC0301</h4>
+                    <p>Revisión completa de cumplimiento</p>
+                    <span class="element-status">🔍 Auditoría</span>
+                </div>
+            </div>
+
+            <!-- Element 1: Carta Descriptiva -->
+            <div id="element1Content" class="element-content active">
+                <h3><i class="fas fa-file-alt"></i> Elemento 1: Carta Descriptiva del Curso</h3>
+                
+                <div class="form-group">
+                    <label>
+                        Información General del Curso
+                        <button class="ai-assistant" onclick="aiAssist('info-general')">
+                            <i class="fas fa-robot"></i> Ayuda IA
+                        </button>
+                    </label>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre del Curso *</label>
+                        <input type="text" id="courseName" placeholder="Ej: Liderazgo Efectivo" onchange="updateProgress(1, 25)">
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (horas) *</label>
+                        <input type="number" id="courseDuration" placeholder="40" onchange="updateProgress(1, 50)">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modalidad *</label>
+                        <select id="courseModality" onchange="updateProgress(1, 75)">
+                            <option value="">Seleccionar...</option>
+                            <option value="presencial">Presencial Grupal</option>
+                            <option value="virtual
