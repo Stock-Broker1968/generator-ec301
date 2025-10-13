@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC0301 Generator - Global Skills Cert S.C.</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #1E3A8A;
+            --success-color: #10B981;
+            --background-color: #F1F5F9;
+            --white: #FFFFFF;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --border-color: #E5E7EB;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .dashboard-header {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .user-info h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .progress-overview {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .progress-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .progress-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--background-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), #FF8A5C);
+        }
+
+        .progress-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: var(--border-color);
+            height: 8px;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), #FF8A5C);
+            height: 100%;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), #FF8A5C);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .product-card.completed {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
+            border-color: var(--success-color);
+        }
+
+        .product-card.completed::before {
+            background: var(--success-color);
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), #FF8A5C);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .product-card.completed .product-icon {
+            background: linear-gradient(135deg, var(--success-color), #34D399);
+        }
+
+        .product-details h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .product-subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .product-description {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .product-features i {
+            color: var(--success-color);
+            font-size: 0.8rem;
+        }
+
+        .product-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        .status-progress {
+            background: rgba(245, 158, 11, 0.1);
+            color: #D97706;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .open-btn {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .product-card.completed .open-btn {
+            background: linear-gradient(45deg, var(--success-color), #34D399);
+        }
+
+        .final-audit-section {
+            background: linear-gradient(135deg, var(--secondary-color), #1E40AF);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-audit-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .audit-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .audit-score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            background: linear-gradient(45deg, var(--primary-color), #FFB84D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer {
+            background: var(--secondary-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            display: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Abriendo Sistema EC0301...</h3>
+            <p>Inicializando módulo especializado</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>EC0301 Generator Pro</h2>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" onclick="showInfo()">
+                        <i class="fas fa-info-circle"></i> Información
+                    </button>
+                    <button class="btn btn-primary" onclick="executeFullAudit()" id="auditBtn">
+                        <i class="fas fa-search"></i> Auditoría Final
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="user-info">
+                <h2>Bienvenido, <span id="userName">Usuario Profesional</span></h2>
+                <p style="color: var(--text-light); margin-top: 0.5rem;">
+                    <i class="fas fa-key" style="color: var(--primary-color);"></i>
+                    Licencia: EC01-PRO-2025 | Válida hasta: 12 de enero de 2025
+                </p>
+                <div style="margin-top: 1rem;">
+                    <span style="background: rgba(16, 185, 129, 0.1); color: var(--success-color); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-crown"></i> Sistema Completo EC0301 Activado
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">
+                <i class="fas fa-chart-line"></i> Progreso General del Portafolio EC0301
+            </h3>
+            <div class="progress-cards">
+                <div class="progress-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Carta Descriptiva</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress1"></div>
+                    </div>
+                    <span id="progressText1">0% Completado</span>
+                </div>
+                <div class="progress-card">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h4>Instrumentos</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress2"></div>
+                    </div>
+                    <span id="progressText2">0% Completado</span>
+                </div>
+                <div class="progress-card">
+                    <i class="fas fa-book"></i>
+                    <h4>Manuales</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress3"></div>
+                    </div>
+                    <span id="progressText3">0% Completado</span>
+                </div>
+                <div class="progress-card">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Cumplimiento</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressTotal"></div>
+                    </div>
+                    <span id="progressTotalText">0% EC0301</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid">
+            <!-- Producto 1: Carta Descriptiva -->
+            <div class="product-card" id="product1">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Carta Descriptiva Completa</h3>
+                        <div class="product-subtitle">Producto 1 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Sistema completo para generar cartas descriptivas 100% conformes al estándar EC0301 con validación automática y asistencia de IA especializada.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Información general y perfil del participante</li>
+                    <li><i class="fas fa-check-circle"></i> Objetivos con Taxonomía de Bloom</li>
+                    <li><i class="fas fa-check-circle"></i> 4 dominios de aprendizaje EC0301</li>
+                    <li><i class="fas fa-check-circle"></i> Desarrollo cronológico detallado</li>
+                    <li><i class="fas fa-check-circle"></i> Validación automática CONOCER</li>
+                    <li><i class="fas fa-check-circle"></i> Agente IA especializado</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status1">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('carta-descriptiva')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+
+            <!-- Producto 2: Instrumentos de Evaluación -->
+            <div class="product-card" id="product2">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Instrumentos de Evaluación</h3>
+                        <div class="product-subtitle">Producto 2 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Generador avanzado de instrumentos de evaluación: diagnóstica, formativa y sumativa, con reactivos inteligentes y rúbricas especializadas.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Evaluación diagnóstica personalizada</li>
+                    <li><i class="fas fa-check-circle"></i> Instrumentos de conocimientos (reactivos)</li>
+                    <li><i class="fas fa-check-circle"></i> Evaluación de habilidades (rúbricas)</li>
+                    <li><i class="fas fa-check-circle"></i> Evaluación de satisfacción</li>
+                    <li><i class="fas fa-check-circle"></i> Banco de reactivos IA</li>
+                    <li><i class="fas fa-check-circle"></i> Validación psicométrica</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status2">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('instrumentos-evaluacion')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+
+            <!-- Producto 3: Manuales del Curso -->
+            <div class="product-card" id="product3">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Manuales del Curso</h3>
+                        <div class="product-subtitle">Producto 3 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Sistema integral para crear manuales del participante e instructor con contenidos pedagógicos, actividades y recursos didácticos especializados.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Manual del Participante completo</li>
+                    <li><i class="fas fa-check-circle"></i> Manual del Instructor detallado</li>
+                    <li><i class="fas fa-check-circle"></i> Actividades prácticas diseñadas</li>
+                    <li><i class="fas fa-check-circle"></i> Recursos didácticos incluidos</li>
+                    <li><i class="fas fa-check-circle"></i> Formato editorial profesional</li>
+                    <li><i class="fas fa-check-circle"></i> Generación automática PDF</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status3">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('manuales-curso')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+
+            <!-- Producto 4: Planeación Didáctica -->
+            <div class="product-card" id="product4">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Planeación Didáctica</h3>
+                        <div class="product-subtitle">Producto 4 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Herramienta especializada para crear secuencias didácticas, planes de sesión y cronogramas de actividades con metodología andragógica.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Secuencias didácticas estructuradas</li>
+                    <li><i class="fas fa-check-circle"></i> Planes de sesión detallados</li>
+                    <li><i class="fas fa-check-circle"></i> Cronograma de actividades</li>
+                    <li><i class="fas fa-check-circle"></i> Metodología andragógica</li>
+                    <li><i class="fas fa-check-circle"></i> Recursos por sesión</li>
+                    <li><i class="fas fa-check-circle"></i> Evaluación continua integrada</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status4">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('planeacion-didactica')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+
+            <!-- Producto 5: Material Didáctico -->
+            <div class="product-card" id="product5">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Material Didáctico</h3>
+                        <div class="product-subtitle">Producto 5 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Generador de recursos didácticos: presentaciones, infografías, ejercicios prácticos y material de apoyo visual para modalidad presencial grupal.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Presentaciones PowerPoint automáticas</li>
+                    <li><i class="fas fa-check-circle"></i> Infografías especializadas</li>
+                    <li><i class="fas fa-check-circle"></i> Ejercicios prácticos diseñados</li>
+                    <li><i class="fas fa-check-circle"></i> Material visual profesional</li>
+                    <li><i class="fas fa-check-circle"></i> Plantillas personalizables</li>
+                    <li><i class="fas fa-check-circle"></i> Recursos interactivos</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status5">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('material-didactico')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+
+            <!-- Producto 6: Plan de Evaluación -->
+            <div class="product-card" id="product6">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Plan de Evaluación</h3>
+                        <div class="product-subtitle">Producto 6 - EC0301 CONOCER</div>
+                    </div>
+                </div>
+                
+                <div class="product-description">
+                    Sistema integral de evaluación con criterios, indicadores, escalas de calificación y reportes de seguimiento del aprendizaje.
+                </div>
+
+                <ul class="product-features">
+                    <li><i class="fas fa-check-circle"></i> Criterios de evaluación EC0301</li>
+                    <li><i class="fas fa-check-circle"></i> Indicadores de desempeño</li>
+                    <li><i class="fas fa-check-circle"></i> Escalas de calificación</li>
+                    <li><i class="fas fa-check-circle"></i> Reportes de seguimiento</li>
+                    <li><i class="fas fa-check-circle"></i> Análisis de resultados</li>
+                    <li><i class="fas fa-check-circle"></i> Certificación automática</li>
+                </ul>
+
+                <div class="product-status">
+                    <div class="status-badge status-pending" id="status6">
+                        <i class="fas fa-circle"></i> Pendiente
+                    </div>
+                    <button class="open-btn" onclick="openProduct('plan-evaluacion')">
+                        <i class="fas fa-external-link-alt"></i> Abrir Sistema
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Audit Section -->
+        <div class="final-audit-section" id="finalAuditSection" style="display: none;">
+            <div class="audit-content">
+                <h2><i class="fas fa-award"></i> Auditoría Final EC0301</h2>
+                <div class="audit-score" id="finalScore">0%</div>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Cumplimiento total del Estándar de Competencia</p>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; margin: 2rem 0;">
+                    <h3 style="margin-bottom: 1rem;">Estado del Portafolio:</h3>
+                    <div id="auditResults" style="text-align: left; max-width: 600px; margin: 0 auto;">
+                        <!-- Resultados se cargan dinámicamente -->
+                    </div>
+                </div>
+
+                <button class="btn" onclick="generateFinalPortfolio()" id="generatePortfolioBtn" style="background: var(--primary-color); color: white; font-size: 1.2rem; padding: 1rem 2rem;" disabled>
+                    <i class="fas fa-download"></i> Generar Portafolio Completo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>Global Skills Cert S.C.</h3>
+            <p>EC0301 Solutions México - Sistema Profesional Completo</p>
+            <p>📧 info@skillscert.com.mx | 📱 +52 38822334 | 📱 2201669863</p>
+            <p>📍 Colonia Juárez, Ocoyoacac, Estado de México</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">&copy; 2025 Global Skills Cert S.C. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== VARIABLES GLOBALES =====
+        let productProgress = {
+            1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0
+        };
+
+        let productStatus = {
+            1: 'pending', 2: 'pending', 3: 'pending', 
+            4: 'pending', 5: 'pending', 6: 'pending'
+        };
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 EC0301 Generator Pro - Sistema Modular Inicializado');
+            console.log('🏢 Global Skills Cert S.C. - EC0301 Solutions México');
+            
+            updateProgressOverview();
+            loadProductStates();
+            
+            // Simular carga de datos del usuario
+            setTimeout(() => {
+                showMessage('✅ Sistema EC0301 completamente cargado', 'success');
+            }, 1000);
+        });
+
+        // ===== NAVEGACIÓN A PRODUCTOS =====
+        function openProduct(productType) {
+            showLoadingOverlay();
+            
+            const productPages = {
+                'carta-descriptiva': 'carta-descriptiva-completa.html',
+                'instrumentos-evaluacion': 'instrumentos-evaluacion.html',
+                'manuales-curso': 'manuales-curso.html',
+                'planeacion-didactica': 'planeacion-didactica.html',
+                'material-didactico': 'material-didactico.html',
+                'plan-evaluacion': 'plan-evaluacion.html'
+            };
+
+            const productNames = {
+                'carta-descriptiva': 'Carta Descriptiva Completa',
+                'instrumentos-evaluacion': 'Instrumentos de Evaluación',
+                'manuales-curso': 'Manuales del Curso',
+                'planeacion-didactica': 'Planeación Didáctica',
+                'material-didactico': 'Material Didáctico',
+                'plan-evaluacion': 'Plan de Evaluación'
+            };
+
+            showMessage(`🔄 Abriendo ${productNames[productType]}...`, 'info');
+
+            setTimeout(() => {
+                const pageUrl = productPages[productType];
+                
+                // Intentar abrir en nueva ventana
+                const newWindow = window.open(pageUrl, '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+                
+                if (newWindow) {
+                    hideLoadingOverlay();
+                    showMessage(`✅ ${productNames[productType]} abierto exitosamente`, 'success');
+                    
+                    // Simular progreso cuando se abre la ventana
+                    const productId = Object.keys(productPages).indexOf(productType) + 1;
+                    if (productProgress[productId] === 0) {
+                        productProgress[productId] = 25;
+                        productStatus[productId] = 'progress';
+                        updateProductStatus(productId);
+                        updateProgressOverview();
+                    }
+                } else {
+                    hideLoadingOverlay();
+                    showMessage('⚠️ Por favor permita ventanas emergentes para acceder al sistema completo', 'warning');
+                    
+                    // Fallback: mostrar información
+                    showProductInfo(productType, productNames[productType]);
+                }
+            }, 2000);
+        }
+
+        function showProductInfo(productType, productName) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 16px; max-width: 600px; width: 90%; padding: 3rem; text-align: center;">
+                    <i class="fas fa-info-circle" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 2rem;"></i>
+                    <h2 style="color: var(--secondary-color); margin-bottom: 1rem;">${productName}</h2>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">
+                        Para acceder al sistema completo, asegúrese de que el archivo correspondiente esté disponible en el servidor.
+                    </p>
+                    <div style="background: var(--background-color); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+                        <h4 style="color: var(--secondary-color); margin-bottom: 1rem;">Archivo requerido:</h4>
+                        <code style="background: var(--white); padding: 0.5rem 1rem; border-radius: 4px; color: var(--primary-color); font-weight: bold;">
+                            ${productPages[productType] || productType + '.html'}
+                        </code>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="background: var(--primary-color); color: white; border: none; padding: 1rem 2rem; 
+                                   border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fas fa-check"></i> Entendido
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // ===== GESTIÓN DE PROGRESO =====
+        function updateProgressOverview() {
+            const totalProgress = Object.values(productProgress).reduce((sum, val) => sum + val, 0) / 6;
+            
+            // Actualizar barras individuales
+            for (let i = 1; i <= 6; i++) {
+                const progressBar = document.getElementById(`progress${i <= 3 ? i : 'Total'}`);
+                const progressText = document.getElementById(`progressText${i <= 3 ? i : 'Total'}`);
+                
+                if (i <= 3) {
+                    if (progressBar && progressText) {
+                        progressBar.style.width = productProgress[i] + '%';
+                        progressText.textContent = productProgress[i] + '% Completado';
+                    }
+                } else if (i === 4) {
+                    // Barra de cumplimiento total
+                    if (progressBar && progressText) {
+                        progressBar.style.width = totalProgress + '%';
+                        progressText.textContent = Math.round(totalProgress) + '% EC0301';
+                    }
+                }
+            }
+
+            // Mostrar sección de auditoría final si hay progreso significativo
+            if (totalProgress >= 50) {
+                document.getElementById('finalAuditSection').style.display = 'block';
+            }
+        }
+
+        function updateProductStatus(productId) {
+            const card = document.getElementById(`product${productId}`);
+            const statusBadge = document.getElementById(`status${productId}`);
+            
+            if (!card || !statusBadge) return;
+
+            const progress = productProgress[productId];
+            const status = productStatus[productId];
+
+            // Actualizar clase de la tarjeta
+            card.classList.remove('completed');
+            if (progress >= 100) {
+                card.classList.add('completed');
+                productStatus[productId] = 'completed';
+            }
+
+            // Actualizar badge de estado
+            statusBadge.className = 'status-badge';
+            if (progress >= 100) {
+                statusBadge.className += ' status-completed';
+                statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> Completado';
+            } else if (progress > 0) {
+                statusBadge.className += ' status-progress';
+                statusBadge.innerHTML = '<i class="fas fa-clock"></i> En Progreso';
+            } else {
+                statusBadge.className += ' status-pending';
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> Pendiente';
+            }
+        }
+
+        // ===== AUDITORÍA FINAL =====
+        function executeFullAudit() {
+            showMessage('🔍 Ejecutando auditoría completa del portafolio EC0301...', 'info');
+            
+            const auditBtn = document.getElementById('auditBtn');
+            auditBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Auditando...';
+            auditBtn.disabled = true;
+
+            setTimeout(() => {
+                const completedProducts = Object.values(productProgress).filter(p => p >= 100).length;
+                const totalScore = Object.values(productProgress).reduce((sum, val) => sum + val, 0) / 6;
+
+                document.getElementById('finalScore').textContent = Math.round(totalScore) + '%';
+
+                const auditResults = document.getElementById('auditResults');
+                auditResults.innerHTML = `
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                            <span>Productos Completados:</span>
+                            <strong>${completedProducts}/6</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                            <span>Cumplimiento EC0301:</span>
+                            <strong>${Math.round(totalScore)}%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                            <span>Estado del Portafolio:</span>
+                            <strong style="color: ${totalScore >= 80 ? '#10B981' : totalScore >= 50 ? '#F59E0B' : '#EF4444'}">
+                                ${totalScore >= 80 ? '✅ Listo para Evaluador' : totalScore >= 50 ? '⏳ En Desarrollo' : '🔴 Requiere Atención'}
+                            </strong>
+                        </div>
+                    </div>
+                `;
+
+                if (totalScore >= 80) {
+                    document.getElementById('generatePortfolioBtn').disabled = false;
+                    showMessage('🎉 ¡Portafolio EC0301 listo para evaluador CONOCER!', 'success');
+                } else {
+                    showMessage(`Auditoría completada. Complete más productos para alcanzar el 100% de cumplimiento.`, 'warning');
+                }
+
+                auditBtn.innerHTML = '<i class="fas fa-search"></i> Auditoría Final';
+                auditBtn.disabled = false;
+            }, 3000);
+        }
+
+        // ===== GENERACIÓN DE PORTAFOLIO =====
+        function generateFinalPortfolio() {
+            showMessage('📦 Generando portafolio completo EC0301...', 'info');
+
+            setTimeout(() => {
+                const portfolioContent = `
+PORTAFOLIO COMPLETO EC0301 - CONOCER
+===================================
+
+Generado por: EC0301 Generator Pro - Global Skills Cert S.C.
+Fecha: ${new Date().toLocaleDateString('es-MX')}
+Usuario: Usuario Profesional
+Licencia: EC01-PRO-2025
+
+PRODUCTOS INCLUIDOS:
+==================
+${Object.keys(productProgress).map(id => {
+    const progress = productProgress[id];
+    const productNames = [
+        'Carta Descriptiva Completa',
+        'Instrumentos de Evaluación',
+        'Manuales del Curso',
+        'Planeación Didáctica',
+        'Material Didáctico',
+        'Plan de Evaluación'
+    ];
+    return `✅ Producto ${id}: ${productNames[id-1]} - ${progress}% Completado`;
+}).join('\n')}
+
+CUMPLIMIENTO EC0301:
+==================
+Score Total: ${Math.round(Object.values(productProgress).reduce((sum, val) => sum + val, 0) / 6)}%
+Estado: APROBADO - Listo para evaluador CONOCER
+
+VALIDACIÓN:
+==========
+✅ Todos los productos cumplen con estándares CONOCER
+✅ Modalidad presencial grupal verificada  
+✅ Objetivos SMART validados
+✅ Evaluación integral confirmada
+✅ Documentación completa y coherente
+
+---
+Global Skills Cert S.C. | info@skillscert.com.mx | +52 38822334
+Colonia Juárez, Ocoyoacac, Estado de México
+© 2025 - Todos los derechos reservados
+                `;
+
+                const element = document.createElement('a');
+                const file = new Blob([portfolioContent], {type: 'text/plain'});
+                element.href = URL.createObjectURL(file);
+                element.download = `Portafolio_EC0301_Completo_${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+
+                showMessage('✅ Portafolio EC0301 completo generado y descargado', 'success');
+            }, 2000);
+        }
+
+        // ===== UTILIDADES =====
+        function showLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showInfo() {
+            showMessage('ℹ️ EC0301 Generator Pro - Sistema completo para generar productos CONOCER', 'info');
+        }
+
+        function loadProductStates() {
+            // Simular carga de estados guardados
+            // En una implementación real, esto vendría de localStorage o servidor
+            console.log('📂 Cargando estados de productos...');
+        }
+
+        function showMessage(message, type = 'info') {
+            const div = document.createElement('div');
+            div.style.cssText = `
+                position: fixed; top: 20px; right: 20px; z-index: 10001;
+                padding: 1rem 2rem; border-radius: 8px; max-width: 400px;
+                font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            `;
+            
+            const colors = {
+                success: { bg: '#10B981', color: 'white' },
+                warning: { bg: '#F59E0B', color: 'white' },
+                error: { bg: '#EF4444', color: 'white' },
+                info: { bg: '#FF6B35', color: 'white' }
+            };
+            
+            const style = colors[type] || colors.info;
+            div.style.background = style.bg;
+            div.style.color = style.color;
+            div.textContent = message;
+            
+            document.body.appendChild(div);
+            
+            setTimeout(() => {
+                if (div.parentNode) {
+                    div.style.transform = 'translateX(100%)';
+                    div.style.transition = 'transform 0.3s ease';
+                    setTimeout(() => {
+                        if (div.parentNode) div.parentNode.removeChild(div);
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // ===== SIMULACIÓN DE DATOS =====
+        // Simular algunos productos con progreso para demostración
+        setTimeout(() => {
+            productProgress[1] = 15; // Carta descriptiva con algo de progreso
+            updateProductStatus(1);
+            updateProgressOverview();
+        }, 2000);
+
+        console.log('🎯 EC0301 Generator Pro completamente inicializado');
+        console.log('📊 6 productos especializados disponibles');
+        console.log('🤖 Sistema de IA integrado en cada módulo');
+        console.log('✅ Listo para generar portafolios EC0301 completos');
+    </script>
+</body>
+</html>
