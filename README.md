@@ -1,12 +1,11 @@
 # EC0301 Generator
 
-Aplicación web para generar productos del estándar EC0301 (Diseño de cursos de formación del capital humano).
+Sistema comercial completo para generar productos del Estándar de Competencia EC0301 con IA.
 
-## Características
+## 🏢 Empresa
+**Global Skills Cert S.C. EC0301 Solutions México**
+- 📧 info@skillscert.com.mx
+- 📱 +52 38822334 | 2201669863
+- 📍 Colonia Juárez, Ocoyoacac, Estado de México
 
-- Asistente para la certificación EC0301.
-- Formulario inicial para datos y avance.
-- Generador estructurado de componentes educativos.
-
-## Instalación
-
+## 🚀 Instalación
