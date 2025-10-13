@@ -1,4 +1,3 @@
-<!-- public/assets/common.js -->
 <script>
 function toast(msg,type='info'){
   const d=document.createElement('div');
