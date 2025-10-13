@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contrato de Aprendizaje - EC0301</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <style>
+    .toolbar{display:flex;gap:1rem;margin-bottom:1rem}
+    .section{margin:1rem 0}
+    .section-title{font-weight:bold;color:var(--secondary);margin-bottom:.5rem}
+    ol{padding-left:1.5rem;margin-bottom:1rem}
+    .sign{margin-top:2rem}
+    .sign div{margin-bottom:2rem;border-top:1px dashed var(--border);width:60%;padding-top:.5rem}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+      <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF</button>
+      <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
+    </div>
+    <h2 class="section-title">Contrato de Aprendizaje</h2>
+    <div>
+      <strong>Curso:</strong> <span id="ct_curso"></span><br>
+      <strong>Instructor:</strong> <span id="ct_instructor"></span><br>
+      <strong>Lugar:</strong> <span id="ct_lugar"></span><br>
+      <strong>Fecha:</strong> <span id="ct_fecha"></span>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">1. Compromisos del Instructor</h3>
+      <ol>
+        <li>Proporcionar materiales claros y completos.</li>
+        <li>Facilitar un ambiente de aprendizaje respetuoso.</li>
+        <li>Explicar los conceptos con ejemplos prácticos.</li>
+        <li>Responder preguntas de manera oportuna.</li>
+        <li>Evaluar el progreso de los participantes.</li>
+        <li>Fomentar la participación activa.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">2. Compromisos del Participante</h3>
+      <ol>
+        <li>Asistir puntualmente a todas las sesiones.</li>
+        <li>Participar activamente en las actividades.</li>
+        <li>Realizar las tareas y prácticas asignadas.</li>
+        <li>Respetar las normas del grupo y del instructor.</li>
+        <li>Comunicar dudas y retroalimentación.</li>
+        <li>Cumplir con los objetivos de aprendizaje.</li>
+      </ol>
+    </div>
+
+    <div class="sign">
+      <div>Nombre y firma del Participante</div>
+      <div>Firma del Facilitador/Instructor</div>
+    </div>
+  </div>
+
+  <script>
+    const KEY_CARTA='EC0301_CARTA';
+    function loadHeader(){
+      const d=JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      ['curso','instructor','lugar','fecha'].forEach(k=>{
+        document.getElementById('ct_'+k).textContent = d[k]||'';
+      });
+    }
+    function generatePDF(){
+      const data={ header:{
+        curso:ct_curso.textContent,
+        instructor:ct_instructor.textContent,
+        lugar:ct_lugar.textContent,
+        fecha:ct_fecha.textContent
+      }};
+      fetch('/api/generate-contract-pdf',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data)
+      }).then(r=>r.blob()).then(blob=>{
+        const url=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=url; a.download=`Contrato_Aprendizaje_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.click();
+      });
+    }
+    function markComplete(){ parent?.postMessage({deliverable:10,progress:100},'*'); }
+    document.addEventListener('DOMContentLoaded', loadHeader);
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
