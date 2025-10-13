@@ -1,0 +1,19 @@
+
+## 🧪 Datos de Prueba
+- **Tarjeta:** 4111 1111 1111 1111
+- **Fecha:** 12/26
+- **CVV:** 123
+- **Acceso Demo:** Botón "🚀 Acceso Demo"
+
+## 🌐 Deploy
+1. Subir a GitHub
+2. Conectar en Render.com
+3. Deploy automático
+
+## ✨ Características
+- Sistema comercial ($2,500 MXN)
+- Generador EC0301 con IA
+- Auditoría automática
+- PDF profesional
+
+© 2025 Global Skills Cert S.C.
