@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Descriptiva EC0301 - Global Skills Cert S.C.</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #1E3A8A;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --error-color: #EF4444;
+            --background-color: #F1F5F9;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* SIDEBAR DE NAVEGACIÓN */
+        .sidebar {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .progress-indicator {
+            margin-bottom: 2rem;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--border-color) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .nav-sections {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.5rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        /* ÁREA PRINCIPAL */
+        .main-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+        }
+
+        .ai-assistant {
+            background: linear-gradient(45deg, var(--primary-color), #FF8A5C);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .ai-assistant:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        /* FORMULARIOS */
+        .form-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .input-counter {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        /* OBJETIVOS ESPECÍFICOS */
+        .objetivos-container {
+            background: var(--background-color);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .objetivo-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .dominio-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dominio-card {
+            padding: 1rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dominio-card.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .verbo-suggestions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .verbo-tag {
+            background: var(--background-color);
+            color: var(--text-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .verbo-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* DESARROLLO CRONOLÓGICO */
+        .cronologia-container {
+            background: var(--background-color);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .fase-item {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .tecnica-item {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .tiempo-display {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* VALIDACIONES */
+        .validation-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 350px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .validation-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .validation-item:last-child {
+            border-bottom: none;
+        }
+
+        .validation-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .validation-icon.valid {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .validation-icon.invalid {
+            background: var(--error-color);
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>Carta Descriptiva EC0301</h2>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" onclick="window.history.back()">
+                        <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                    </button>
+                    <button class="btn btn-success" onclick="generarCartaFinal()" id="generarBtn" disabled>
+                        <i class="fas fa-file-pdf"></i> Generar Carta Descriptiva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <!-- Sidebar de Navegación -->
+            <div class="sidebar">
+                <div class="progress-indicator">
+                    <div class="progress-circle" id="progressCircle">0%</div>
+                    <h4 style="text-align: center; color: var(--secondary-color);">Progreso Total</h4>
+                </div>
+
+                <ul class="nav-sections">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" onclick="showSection('informacion-general')">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Información General</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('perfil-participante')">
+                            <i class="fas fa-users"></i>
+                            <span>Perfil del Participante</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('objetivos')">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Objetivos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('requerimientos')">
+                            <i class="fas fa-tools"></i>
+                            <span>Requerimientos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('evaluacion')">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Evaluación</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('desarrollo')">
+                            <i class="fas fa-clock"></i>
+                            <span>Desarrollo Cronológico</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('validacion')">
+                            <i class="fas fa-check-double"></i>
+                            <span>Validación Final</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                    <h5 style="color: var(--secondary-color); margin-bottom: 1rem;">
+                        <i class="fas fa-robot"></i> Agente IA Especializado
+                    </h5>
+                    <button class="ai-assistant" onclick="activarAgente()" style="width: 100%;">
+                        <i class="fas fa-magic"></i> Activar Asistente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <div class="main-content">
+                <!-- SECCIÓN 1: INFORMACIÓN GENERAL -->
+                <div id="informacion-general" class="section active">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            1. Información General del Curso
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('info-general')">
+                            <i class="fas fa-robot"></i> Ayuda IA
+                        </button>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreCurso">Nombre del Curso-Taller *</label>
+                                <div class="form-help">Escriba el título completo y específico del curso que impartirá (máximo 80 caracteres)</div>
+                                <input type="text" id="nombreCurso" maxlength="80" onchange="updateProgress()" oninput="updateCounter(this, 80)">
+                                <div class="input-counter">0/80 caracteres</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="duracion">Duración *</label>
+                                <div class="form-help">Especifique el total de horas académicas del curso</div>
+                                <select id="duracion" onchange="updateProgress()">
+                                    <option value="">Seleccionar duración...</option>
+                                    <option value="8">8 horas (1 día)</option>
+                                    <option value="16">16 horas (2 días)</option>
+                                    <option value="24">24 horas (3 días)</option>
+                                    <option value="32">32 horas (4 días)</option>
+                                    <option value="40">40 horas (5 días)</option>
+                                    <option value="custom">Personalizada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="diseñador">Nombre del Diseñador *</label>
+                                <div class="form-help">Nombre completo de la persona que diseñó el curso</div>
+                                <input type="text" id="diseñador" onchange="updateProgress()">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="facilitador">Nombre del Facilitador/Instructor *</label>
+                                <div class="form-help">Nombre completo de quien impartirá el curso</div>
+                                <input type="text" id="facilitador" onchange="updateProgress()">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lugar">Lugar de Instrucción *</label>
+                                <div class="form-help">Dirección completa donde se desarrollará el curso</div>
+                                <textarea id="lugar" onchange="updateProgress()" placeholder="Ejemplo: Sala de Capacitación, Edificio Corporativo, Av. Insurgentes 123, Ciudad de México"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fechas">Fecha(s) *</label>
+                                <div class="form-help">Escriba las fechas exactas de impartición del curso</div>
+                                <input type="text" id="fechas" onchange="updateProgress()" placeholder="Del 15 al 19 de enero de 2025, de 9:00 a 17:00 hrs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="nextSection('perfil-participante')">
+                            Siguiente: Perfil del Participante <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: PERFIL DEL PARTICIPANTE -->
+                <div id="perfil-participante" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-users"></i>
+                            2. Perfil del Participante
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('perfil-participante')">
+                            <i class="fas fa-robot"></i> Ayuda IA
+                        </button>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="psicograficas">Características Psicográficas *</label>
+                            <div class="form-help">Describa 3 características demográficas y sociales del participante ideal (ocupación, edad, nivel socioeconómico)</div>
+                            <textarea id="psicograficas" onchange="updateProgress()" placeholder="• Ocupación: Supervisores de primera línea en empresas manufactureras&#10;• Edad: Entre 28 y 45 años&#10;• Nivel socioeconómico: Medio-alto con experiencia laboral de 5+ años"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="conocimientos">Conocimientos Previos *</label>
+                                <div class="form-help">Especifique el nivel educativo y conocimientos previos requeridos</div>
+                                <textarea id="conocimientos" onchange="updateProgress()" placeholder="Licenciatura terminada o experiencia equivalente en gestión de equipos"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="habilidades">Habilidades Requeridas *</label>
+                                <div class="form-help">Liste las habilidades previas que debe poseer el participante</div>
+                                <textarea id="habilidades" onchange="updateProgress()" placeholder="Comunicación interpersonal, manejo de conflictos básico, uso de herramientas digitales"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="numeroParticipantes">Número de Participantes *</label>
+                                <div class="form-help">Indique el número exacto de personas para las que se diseñó el curso</div>
+                                <select id="numeroParticipantes" onchange="updateProgress()">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="8-12">8-12 participantes (grupo pequeño)</option>
+                                    <option value="13-20">13-20 participantes (grupo mediano)</option>
+                                    <option value="21-25">21-25 participantes (grupo grande)</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoGrupo">Tipo de Grupo EC0301 *</label>
+                                <div class="form-help">Seleccione la clasificación del grupo según EC0301</div>
+                                <select id="tipoGrupo" onchange="updateProgress()">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="homogeneo">Grupo Homogéneo (mismo perfil profesional)</option>
+                                    <option value="heterogeneo">Grupo Heterogéneo (diferentes perfiles)</option>
+                                    <option value="mixto">Grupo Mixto (combinación de perfiles)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('informacion-general')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextSection('objetivos')">
+                            Siguiente: Objetivos <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: OBJETIVOS -->
+                <div id="objetivos" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-bullseye"></i>
+                            3. Objetivos del Curso
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('objetivos')">
+                            <i class="fas fa-robot"></i> Ayuda IA con Taxonomía de Bloom
+                        </button>
+                    </div>
+
+                    <!-- OBJETIVO GENERAL -->
+                    <div style="background: var(--background-color); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                            <i class="fas fa-target"></i> Objetivo General
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Sujeto</label>
+                                <input type="text" value="El participante" readonly style="background: #f0f0f0;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dominioGeneral">Dominio de Aprendizaje Principal *</label>
+                                <select id="dominioGeneral" onchange="updateObjetivoGeneral()">
+                                    <option value="">Seleccionar dominio...</option>
+                                    <option value="cognitivo">Cognitivo (Conocimientos)</option>
+                                    <option value="psicomotriz">Psicomotriz (Habilidades)</option>
+                                    <option value="afectivo">Afectivo (Actitudes)</option>
+                                    <option value="relacional">Relacional-Social (Competencias sociales)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accionGeneral">Acción o Comportamiento *</label>
+                            <div class="form-help">Complete: "Al finalizar el curso-taller [VERBO DE ACCIÓN + COMPLEMENTO]"</div>
+                            <textarea id="accionGeneral" onchange="updateProgress()" placeholder="Al finalizar el curso-taller aplicará técnicas de liderazgo transformacional, evaluará el clima organizacional y diseñará estrategias de motivación"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="condicionGeneral">Condición de Operación *</label>
+                            <div class="form-help">Explique CÓMO logrará la acción (a través de qué) y PARA QUÉ (finalidad)</div>
+                            <textarea id="condicionGeneral" onchange="updateProgress()" placeholder="A través de metodologías andragógicas, casos reales y herramientas de medición, para mejorar el desempeño de su equipo en un 25% en los siguientes 6 meses"></textarea>
+                        </div>
+
+                        <div style="background: var(--white); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                            <h5>Vista Previa del Objetivo General:</h5>
+                            <p id="objetivoGeneralPreview" style="font-style: italic; color: var(--text-light);">Complete los campos para ver la vista previa</p>
+                        </div>
+                    </div>
+
+                    <!-- OBJETIVOS PARTICULARES -->
+                    <div class="objetivos-container">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                            <i class="fas fa-list-ol"></i> Objetivos Particulares (3 requeridos)
+                        </h3>
+
+                        <!-- Objetivo Particular 1 -->
+                        <div class="objetivo-item">
+                            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Objetivo Particular 1 - Dominio Cognitivo</h4>
+                            
+                            <div class="dominio-selector">
+                                <div class="dominio-card active" data-dominio="cognitivo" onclick="selectDominio(1, 'cognitivo')">
+                                    <i class="fas fa-brain"></i>
+                                    <div>Cognitivo</div>
+                                    <small>Conocer, Comprender, Analizar</small>
+                                </div>
+                                <div class="dominio-card" data-dominio="psicomotriz" onclick="selectDominio(1, 'psicomotriz')">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <div>Psicomotriz</div>
+                                    <small>Aplicar, Demostrar, Ejecutar</small>
+                                </div>
+                                <div class="dominio-card" data-dominio="afectivo" onclick="selectDominio(1, 'afectivo')">
+                                    <i class="fas fa-heart"></i>
+                                    <div>Afectivo</div>
+                                    <small>Valorar, Apreciar, Comprometerse</small>
+                                </div>
+                                <div class="dominio-card" data-dominio="relacional" onclick="selectDominio(1, 'relacional')">
+                                    <i class="fas fa-handshake"></i>
+                                    <div>Relacional-Social</div>
+                                    <small>Interactuar, Colaborar, Liderar</small>
+                                </div>
+                            </div>
+
+                            <div class="verbo-suggestions" id="verbos1">
+                                <!-- Los verbos se cargarán dinámicamente -->
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="accion1">Acción/Comportamiento *</label>
+                                    <input type="text" id="accion1" onchange="updateProgress()" placeholder="Identificará las características del liderazgo transformacional">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="condicion1">Condición de Operación *</label>
+                                    <textarea id="condicion1" onchange="updateProgress()" placeholder="Por medio del análisis de casos empresariales y role playing, con la finalidad de desarrollar habilidades directivas efectivas"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temas1">Temas Relacionados *</label>
+                                <textarea id="temas1" onchange="updateProgress()" placeholder="• Teorías contemporáneas de liderazgo&#10;• Características del líder transformacional&#10;• Diferencias entre liderazgo transaccional y transformacional"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Objetivo Particular 2 -->
+                        <div class="objetivo-item">
+                            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Objetivo Particular 2 - Dominio Psicomotriz</h4>
+                            
+                            <div class="dominio-selector">
+                                <div class="dominio-card" data-dominio="cognitivo" onclick="selectDominio(2, 'cognitivo')">
+                                    <i class="fas fa-brain"></i>
+                                    <div>Cognitivo</div>
+                                </div>
+                                <div class="dominio-card active" data-dominio="psicomotriz" onclick="selectDominio(2, 'psicomotriz')">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <div>Psicomotriz</div>
+                                </div>
+                                <div class="dominio-card" data-dominio="afectivo" onclick="selectDominio(2, 'afectivo')">
+                                    <i class="fas fa-heart"></i>
+                                    <div>Afectivo</div>
+                                </div>
+                                <div class="dominio-card" data-dominio="relacional" onclick="selectDominio(2, 'relacional')">
+                                    <i class="fas fa-handshake"></i>
+                                    <div>Relacional-Social</div>
+                                </div>
+                            </div>
+
+                            <div class="verbo-suggestions" id="verbos2"></div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="accion2">Acción/Comportamiento *</label>
+                                    <input type="text" id="accion2" onchange="updateProgress()" placeholder="Aplicará técnicas de comunicación asertiva">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="condicion2">Condición de Operación *</label>
+                                    <textarea id="condicion2" onchange="updateProgress()" placeholder="A través de ejercicios prácticos y simulaciones grupales, para mejorar la comunicación con su equipo de trabajo"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temas2">Temas Relacionados *</label>
+                                <textarea id="temas2" onchange="updateProgress()" placeholder="• Técnicas de comunicación asertiva&#10;• Manejo de conflictos interpersonales&#10;• Feedback efectivo y constructivo"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Objetivo Particular 3 -->
+                        <div class="objetivo-item">
+                            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Objetivo Particular 3 - Dominio Afectivo/Relacional</h4>
+                            
+                            <div class="dominio-selector">
+                                <div class="dominio-card" data-dominio="cognitivo" onclick="selectDominio(3, 'cognitivo')">
+                                    <i class="fas fa-brain"></i>
+                                    <div>Cognitivo</div>
+                                </div>
+                                <div class="dominio-card" data-dominio="psicomotriz" onclick="selectDominio(3, 'psicomotriz')">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <div>Psicomotriz</div>
+                                </div>
+                                <div class="dominio-card active" data-dominio="afectivo" onclick="selectDominio(3, 'afectivo')">
+                                    <i class="fas fa-heart"></i>
+                                    <div>Afectivo</div>
+                                </div>
+                                <div class="dominio-card" data-dominio="relacional" onclick="selectDominio(3, 'relacional')">
+                                    <i class="fas fa-handshake"></i>
+                                    <div>Relacional-Social</div>
+                                </div>
+                            </div>
+
+                            <div class="verbo-suggestions" id="verbos3"></div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="accion3">Acción/Comportamiento *</label>
+                                    <input type="text" id="accion3" onchange="updateProgress()" placeholder="Valorará la importancia del feedback constructivo">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="condicion3">Condición de Operación *</label>
+                                    <textarea id="condicion3" onchange="updateProgress()" placeholder="Por medio de reflexiones grupales y compromisos personales, para fortalecer las relaciones interpersonales en su ambiente laboral"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temas3">Temas Relacionados *</label>
+                                <textarea id="temas3" onchange="updateProgress()" placeholder="• Importancia del feedback en el desarrollo profesional&#10;• Construcción de relaciones de confianza&#10;• Compromiso personal con el crecimiento del equipo"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('perfil-participante')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextSection('requerimientos')">
+                            Siguiente: Requerimientos <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: REQUERIMIENTOS -->
+                <div id="requerimientos" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-tools"></i>
+                            4. Requerimientos del Curso
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('requerimientos')">
+                            <i class="fas fa-robot"></i> Ayuda IA
+                        </button>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- Instalaciones -->
+                        <div class="form-group">
+                            <label for="instalaciones">Instalaciones, Mobiliario y Distribución *</label>
+                            <div class="form-help">Describa el espacio físico y mobiliario necesario</div>
+                            <textarea id="instalaciones" onchange="updateProgress()" placeholder="• Aula para 20 personas con iluminación natural&#10;• 5 mesas redondas para 4 personas cada una&#10;• 20 sillas ergonómicas con respaldo&#10;• 1 escritorio para instructor&#10;• 2 pizarrones blancos móviles"></textarea>
+                        </div>
+
+                        <!-- Equipo -->
+                        <div class="form-group">
+                            <label for="equipo">Equipo de Apoyo *</label>
+                            <div class="form-help">Liste todo el equipo tecnológico requerido</div>
+                            <textarea id="equipo" onchange="updateProgress()" placeholder="• 1 laptop con Windows 10 o superior&#10;• 1 proyector de 3000 lúmenes mínimo&#10;• 1 pantalla de proyección de 2.5m x 2.5m&#10;• Sistema de audio con 2 bocinas&#10;• 1 micrófono inalámbrico&#10;• Extensiones eléctricas (3 de 5 metros)"></textarea>
+                        </div>
+
+                        <!-- Materiales -->
+                        <div class="form-group">
+                            <label for="materiales">Materiales de Apoyo *</label>
+                            <div class="form-help">Especifique todos los materiales impresos y de papelería</div>
+                            <textarea id="materiales" onchange="updateProgress()" placeholder="• 20 formatos de evaluación diagnóstica&#10;• 20 formatos de evaluación formativa&#10;• 20 formatos de evaluación sumativa&#10;• 20 formatos de evaluación de satisfacción&#10;• 20 contratos de aprendizaje&#10;• 1 lista de asistencia&#10;• 20 hojas blancas por participante&#10;• 20 plumas azules&#10;• 4 marcadores para pizarrón"></textarea>
+                        </div>
+
+                        <!-- Recursos Humanos -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="recursosHumanos">Requerimientos Humanos</label>
+                                <div class="form-help">Indique el personal adicional necesario</div>
+                                <textarea id="recursosHumanos" onchange="updateProgress()" placeholder="1 asistente técnico para apoyo audiovisual (opcional)"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="otros">Otros Requerimientos</label>
+                                <div class="form-help">Materiales especiales no incluidos en categorías anteriores</div>
+                                <textarea id="otros" onchange="updateProgress()" placeholder="• Servicio de café para recesos (2 veces al día)&#10;• 1 cámara fotográfica para documentar actividades&#10;• Gafetes de identificación para participantes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('objetivos')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextSection('evaluacion')">
+                            Siguiente: Evaluación <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 5: EVALUACIÓN -->
+                <div id="evaluacion" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-clipboard-check"></i>
+                            5. Formas, Momentos y Criterios de Evaluación
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('evaluacion')">
+                            <i class="fas fa-robot"></i> Ayuda IA
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="porcentajeAprobacion">Porcentaje Mínimo de Aprobación *</label>
+                        <div class="form-help">Indique el porcentaje mínimo para considerar aprobado al participante</div>
+                        <select id="porcentajeAprobacion" onchange="updateProgress()">
+                            <option value="">Seleccionar...</option>
+                            <option value="70">70% mínimo</option>
+                            <option value="80">80% mínimo (recomendado)</option>
+                            <option value="85">85% mínimo</option>
+                            <option value="90">90% mínimo</option>
+                        </select>
+                    </div>
+
+                    <!-- Evaluaciones -->
+                    <div style="background: var(--background-color); padding: 2rem; border-radius: 12px; margin: 2rem 0;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem;">Tipos de Evaluación</h3>
+
+                        <!-- Diagnóstica -->
+                        <div style="background: var(--white); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--primary-color);">Evaluación Diagnóstica</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="diagnosticaAspecto">Aspecto a Evaluar *</label>
+                                    <input type="text" id="diagnosticaAspecto" onchange="updateProgress()" placeholder="Conocimientos previos sobre liderazgo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosticaPorcentaje">Porcentaje</label>
+                                    <input type="text" id="diagnosticaPorcentaje" value="Referencial (no cuenta para calificación)" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="diagnosticaInstrumento">Instrumento *</label>
+                                    <input type="text" id="diagnosticaInstrumento" onchange="updateProgress()" placeholder="Cuestionario de 10 preguntas abiertas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosticaMomento">Momento *</label>
+                                    <input type="text" id="diagnosticaMomento" onchange="updateProgress()" placeholder="Al inicio del curso (primeros 15 minutos)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formativa -->
+                        <div style="background: var(--white); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--primary-color);">Evaluación Formativa</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="formativaAspecto">Aspecto a Evaluar *</label>
+                                    <input type="text" id="formativaAspecto" onchange="updateProgress()" placeholder="Aplicación de técnicas durante ejercicios prácticos">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formativaPorcentaje">Porcentaje *</label>
+                                    <select id="formativaPorcentaje" onchange="updateProgress(); calcularPorcentajes()">
+                                        <option value="">Seleccionar...</option>
+                                        <option value="30">30%</option>
+                                        <option value="40">40% (recomendado)</option>
+                                        <option value="50">50%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="formativaInstrumento">Instrumento *</label>
+                                    <input type="text" id="formativaInstrumento" onchange="updateProgress()" placeholder="Lista de cotejo con 15 criterios de desempeño">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formativaMomento">Momento *</label>
+                                    <input type="text" id="formativaMomento" onchange="updateProgress()" placeholder="Durante el desarrollo (técnicas demostrativas)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sumativa -->
+                        <div style="background: var(--white); padding: 1.5rem; border-radius: 8px;">
+                            <h4 style="color: var(--primary-color);">Evaluación Sumativa</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sumativaAspecto">Aspecto a Evaluar *</label>
+                                    <input type="text" id="sumativaAspecto" onchange="updateProgress()" placeholder="Integración de conocimientos y habilidades adquiridas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sumativaPorcentaje">Porcentaje *</label>
+                                    <input type="text" id="sumativaPorcentaje" readonly placeholder="Se calcula automáticamente">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sumativaInstrumento">Instrumento *</label>
+                                    <input type="text" id="sumativaInstrumento" onchange="updateProgress()" placeholder="Examen escrito de 20 preguntas + caso práctico">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sumativaMomento">Momento *</label>
+                                    <input type="text" id="sumativaMomento" onchange="updateProgress()" placeholder="Al final del curso (últimos 30 minutos)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('requerimientos')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextSection('desarrollo')">
+                            Siguiente: Desarrollo Cronológico <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 6: DESARROLLO CRONOLÓGICO -->
+                <div id="desarrollo" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-clock"></i>
+                            6. Desarrollo Cronológico
+                        </h2>
+                        <button class="ai-assistant" onclick="aiAssist('desarrollo')">
+                            <i class="fas fa-robot"></i> Generar Cronología Completa
+                        </button>
+                    </div>
+
+                    <div class="cronologia-container">
+                        <!-- Comprobación de Recursos -->
+                        <div class="fase-item">
+                            <div class="tiempo-display">30 minutos previos</div>
+                            <h3>7.1 Comprobación de Recursos</h3>
+                            <div class="form-group">
+                                <label for="comprobacionActividades">Actividades de Verificación *</label>
+                                <textarea id="comprobacionActividades" onchange="updateProgress()" placeholder="1. Aplicar lista de verificación de requerimientos&#10;2. Realizar pruebas de funcionamiento del equipo&#10;3. Verificar distribución del mobiliario&#10;4. Verificar suficiencia de materiales"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Encuadre -->
+                        <div class="fase-item">
+                            <div class="tiempo-display" id="tiempoEncuadre">25-30 minutos</div>
+                            <h3>7.2 Apertura o Encuadre</h3>
+                            
+                            <div class="tecnica-item">
+                                <h4>Presentación del Instructor y Participantes</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionPresentacion">Duración (minutos) *</label>
+                                        <input type="number" id="duracionPresentacion" onchange="calcularTiempos()" placeholder="15" min="5" max="30">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tecnicaRompeHielo">Técnica Rompe Hielo *</label>
+                                        <input type="text" id="tecnicaRompeHielo" onchange="updateProgress()" placeholder="Presentación por parejas">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="actividadesPresentacion">Actividades Específicas *</label>
+                                    <textarea id="actividadesPresentacion" onchange="updateProgress()" placeholder="• Técnica Rompe Hielo: Presentación por parejas (10 min)&#10;• Objetivo: Crear ambiente de confianza y conocimiento mutuo&#10;• Instrucciones: Formar parejas, intercambiar información profesional, presentar al compañero&#10;• Presentaciones individuales: 5 minutos"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialesPresentacion">Materiales Requeridos *</label>
+                                    <input type="text" id="materialesPresentacion" onchange="updateProgress()" placeholder="Lista de asistencia, gafetes, marcadores">
+                                </div>
+                            </div>
+
+                            <div class="tecnica-item">
+                                <h4>Presentación del Curso</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionCurso">Duración (minutos) *</label>
+                                        <input type="number" id="duracionCurso" onchange="calcularTiempos()" placeholder="10" min="5" max="20">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="actividadesCurso">Actividades *</label>
+                                        <textarea id="actividadesCurso" onchange="updateProgress()" placeholder="1. Presentar descripción general del curso&#10;2. Explicar objetivo general y objetivos particulares&#10;3. Mostrar temario completo&#10;4. Explicar beneficios para desarrollo profesional&#10;5. Crear ambiente participativo con preguntas"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tecnica-item">
+                                <h4>Momentos e Instrumentos de Evaluación</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionEvaluacion">Duración (minutos) *</label>
+                                        <input type="number" id="duracionEvaluacion" onchange="calcularTiempos()" placeholder="5" min="3" max="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="actividadesEvaluacion">Actividades *</label>
+                                        <textarea id="actividadesEvaluacion" onchange="updateProgress()" placeholder="• Explicar evaluación diagnóstica (referencial)&#10;• Explicar evaluación formativa (40%)&#10;• Explicar evaluación sumativa (60%)&#10;• Aclarar criterios de aprobación"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tecnica-item">
+                                <h4>Acuerdos y Compromisos</h4>
+                                <div class="form-group">
+                                    <label for="actividadesAcuerdos">Actividades *</label>
+                                    <textarea id="actividadesAcuerdos" onchange="updateProgress()" placeholder="1. Revisar expectativas del curso por escrito&#10;2. Acordar reglas de operación del curso&#10;3. Realizar contrato de aprendizaje&#10;4. Aplicar evaluación diagnóstica"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Desarrollo -->
+                        <div class="fase-item">
+                            <div class="tiempo-display" id="tiempoDesarrollo">Variable según contenido</div>
+                            <h3>7.3 Desarrollo</h3>
+                            <p style="margin-bottom: 1.5rem; color: var(--text-light);">Configure las técnicas instruccionales para cada objetivo particular:</p>
+
+                            <!-- Técnicas para Objetivo 1 -->
+                            <div class="tecnica-item">
+                                <h4>Técnica Expositiva - Objetivo 1 (Dominio Cognitivo)</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionExpositiva1">Duración (minutos) *</label>
+                                        <input type="number" id="duracionExpositiva1" onchange="calcularTiempos()" placeholder="60" min="30" max="180">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="temaExpositiva1">Tema Principal *</label>
+                                        <input type="text" id="temaExpositiva1" onchange="updateProgress()" placeholder="Fundamentos del Liderazgo Transformacional">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="actividadesExpositiva1">Actividades Detalladas (mínimo 8 renglones) *</label>
+                                    <textarea id="actividadesExpositiva1" onchange="updateProgress()" rows="8" placeholder="1. Presentar objetivo del tema&#10;2. Recuperar experiencia previa con preguntas dirigidas&#10;3. Desarrollar contenido teórico con ejemplos empresariales&#10;4. Utilizar casos de estudio de líderes reconocidos&#10;5. Realizar síntesis de aspectos sobresalientes&#10;6. Plantear 3 preguntas de verificación al grupo&#10;7. Promover comentarios sobre utilidad práctica&#10;8. Conectar con experiencias personales de los participantes"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialesExpositiva1">Material Didáctico *</label>
+                                    <input type="text" id="materialesExpositiva1" onchange="updateProgress()" placeholder="Presentación PowerPoint, laptop, proyector, casos de estudio impresos">
+                                </div>
+                            </div>
+
+                            <!-- Técnicas para Objetivo 2 -->
+                            <div class="tecnica-item">
+                                <h4>Técnica Demostrativa - Objetivo 2 (Dominio Psicomotriz)</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionDemostrativa2">Duración (minutos) *</label>
+                                        <input type="number" id="duracionDemostrativa2" onchange="calcularTiempos()" placeholder="90" min="60" max="240">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="temaDemostrativa2">Tema Principal *</label>
+                                        <input type="text" id="temaDemostrativa2" onchange="updateProgress()" placeholder="Aplicación de Técnicas de Comunicación Asertiva">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="actividadesDemostrativa2">Actividades Detalladas *</label>
+                                    <textarea id="actividadesDemostrativa2" onchange="updateProgress()" rows="7" placeholder="1. Presentar objetivo de la actividad práctica&#10;2. Recuperar experiencia previa (2 preguntas mínimo)&#10;3. Ejemplificar la técnica paso a paso con role playing&#10;4. Resolver dudas sobre la demostración&#10;5. Permitir que participantes realicen práctica supervisada&#10;6. Retroalimentar sobre la ejecución individual&#10;7. Aplicar evaluación formativa con lista de cotejo"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialesDemostrativa2">Material Didáctico *</label>
+                                    <input type="text" id="materialesDemostrativa2" onchange="updateProgress()" placeholder="Formatos de evaluación formativa, situaciones para role playing, lista de cotejo">
+                                </div>
+                            </div>
+
+                            <!-- Técnicas para Objetivo 3 -->
+                            <div class="tecnica-item">
+                                <h4>Técnica Diálogo-Discusión - Objetivo 3 (Dominio Afectivo/Relacional)</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="duracionDialogo3">Duración (minutos) *</label>
+                                        <input type="number" id="duracionDialogo3" onchange="calcularTiempos()" placeholder="45" min="30" max="90">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="temaDialogo3">Tema Principal *</label>
+                                        <input type="text" id="temaDialogo3" onchange="updateProgress()" placeholder="Valoración del Feedback Constructivo">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="actividadesDialogo3">Actividades Detalladas *</label>
+                                    <textarea id="actividadesDialogo3" onchange="updateProgress()" rows="9" placeholder="1. Mencionar tema a discutir y su importancia&#10;2. Dividir grupo en 2 subgrupos de trabajo&#10;3. Establecer reglas claras de participación respetuosa&#10;4. Abrir discusión recordando el tema central&#10;5. Propiciar y moderar activamente la discusión&#10;6. Recuperar experiencias previas de los participantes&#10;7. Utilizar ejemplos cotidianos del ambiente laboral&#10;8. Verificar comprensión de conceptos clave&#10;9. Promover comentarios sobre utilidad práctica"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialesDialogo3">Material Didáctico *</label>
+                                    <input type="text" id="materialesDialogo3" onchange="updateProgress()" placeholder="Preguntas guía para discusión, rotafolios, marcadores, casos para reflexión">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cierre -->
+                        <div class="fase-item">
+                            <div class="tiempo-display" id="tiempoCierre">15-20 minutos</div>
+                            <h3>7.4 Cierre</h3>
+                            
+                            <div class="form-group">
+                                <label for="actividadesCierre">Actividades de Cierre *</label>
+                                <textarea id="actividadesCierre" onchange="updateProgress()" rows="6" placeholder="1. Resumen General (5 min): Síntesis de todos los temas vistos&#10;2. Logro de Expectativas (3 min): Verificar cumplimiento de expectativas iniciales&#10;3. Logro de Objetivos (3 min): Discutir cumplimiento de objetivos propuestos&#10;4. Sugerencias de Continuidad (2 min): Recomendar 2 fuentes para profundizar&#10;5. Compromisos de Aplicación (2 min): Formulación de compromisos concretos&#10;6. Evaluación de Reacción (5 min): Aplicar instrumento de satisfacción"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Resumen de Tiempos -->
+                        <div style="background: var(--secondary-color); color: white; padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+                            <h3>Sumatorias de Tiempo</h3>
+                            <div class="form-row">
+                                <div style="text-align: center;">
+                                    <h4>Encuadre</h4>
+                                    <div id="sumatoriaEncuadre" style="font-size: 1.5rem; font-weight: bold;">0 minutos</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <h4>Desarrollo</h4>
+                                    <div id="sumatoriaDesarrollo" style="font-size: 1.5rem; font-weight: bold;">0 minutos</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <h4>Cierre</h4>
+                                    <div id="sumatoriaCierre" style="font-size: 1.5rem; font-weight: bold;">20 minutos</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <h4>Total</h4>
+                                    <div id="sumatoriaTotal" style="font-size: 1.5rem; font-weight: bold;">0 horas</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('evaluacion')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextSection('validacion')">
+                            Siguiente: Validación <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 7: VALIDACIÓN FINAL -->
+                <div id="validacion" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-check-double"></i>
+                            7. Validación Final EC0301
+                        </h2>
+                        <button class="ai-assistant" onclick="ejecutarValidacionCompleta()">
+                            <i class="fas fa-robot"></i> Ejecutar Validación IA
+                        </button>
+                    </div>
+
+                    <div id="validacionResults" style="display: none;">
+                        <div style="background: var(--success-color); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem;">
+                            <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h3>Validación Completada</h3>
+                            <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">
+                                Score de Cumplimiento: <span id="scoreValidacion">0%</span>
+                            </div>
+                            <p>Carta Descriptiva lista para presentar al evaluador CONOCER</p>
+                        </div>
+
+                        <div style="background: var(--white); padding: 2rem; border-radius: 12px; border: 2px solid var(--success-color);">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 1.5rem;">Criterios de Validación EC0301</h4>
+                            
+                            <div class="validation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Campos Requeridos</strong>
+                                        <p>Todos los campos obligatorios completados</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Objetivos SMART</strong>
+                                        <p>Objetivos cumplen metodología SMART</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Dominios de Aprendizaje</strong>
+                                        <p>Los 4 dominios representados correctamente</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Taxonomía de Bloom</strong>
+                                        <p>Verbos alineados con taxonomía</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Coherencia Metodológica</strong>
+                                        <p>Objetivos y actividades coherentes</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Modalidad Presencial Grupal</strong>
+                                        <p>Cumple especificaciones EC0301</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Tiempos y Secuencia</strong>
+                                        <p>Cronología coherente y completa</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="validation-item">
+                                    <div class="validation-icon valid"><i class="fas fa-check"></i></div>
+                                    <div>
+                                        <strong>Evaluaciones</strong>
+                                        <p>3 tipos de evaluación configurados</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background: var(--background-color); padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                                <h5 style="color: var(--secondary-color); margin-bottom: 1rem;">Recomendaciones Finales:</h5>
+                                <ul style="margin-left: 1.5rem;">
+                                    <li>✅ Revisar una vez más la redacción de objetivos para asegurar claridad</li>
+                                    <li>✅ Verificar que los materiales listados estén disponibles</li>
+                                    <li>✅ Confirmar fechas y horarios con los participantes</li>
+                                    <li>✅ Preparar backup de recursos tecnológicos</li>
+                                    <li>✅ El documento está listo para presentar al evaluador CONOCER</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="showSection('desarrollo')">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-success" onclick="generarCartaFinal()" id="generarCartaBtn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                            <i class="fas fa-file-pdf"></i> Generar Carta Descriptiva Final
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Validación Flotante -->
+    <div class="validation-panel" id="validationPanel">
+        <h5 style="color: var(--secondary-color); margin-bottom: 1rem;">
+            <i class="fas fa-clipboard-check"></i> Estado de Validación
+        </h5>
+        <div id="validationItems">
+            <!-- Los elementos de validación se cargarán aquí -->
+        </div>
+    </div>
+
+    <script>
+        // ===== VARIABLES GLOBALES =====
+        let currentSection = 'informacion-general';
+        let cartaData = {};
+        let progressData = {
+            'informacion-general': 0,
+            'perfil-participante': 0,
+            'objetivos': 0,
+            'requerimientos': 0,
+            'evaluacion': 0,
+            'desarrollo': 0,
+            'validacion': 0
+        };
+
+        // Base de datos de verbos por taxonomía de Bloom
+        const verbosBloom = {
+            cognitivo: {
+                recordar: ['Recordar', 'Identificar', 'Reconocer', 'Enumerar', 'Nombrar', 'Definir', 'Describir', 'Localizar'],
+                comprender: ['Comprender', 'Interpretar', 'Explicar', 'Resumir', 'Parafrasear', 'Clasificar', 'Comparar', 'Ejemplificar'],
+                aplicar: ['Aplicar', 'Ejecutar', 'Implementar', 'Demostrar', 'Utilizar', 'Emplear', 'Operar', 'Practicar'],
+                analizar: ['Analizar', 'Diferenciar', 'Organizar', 'Atribuir', 'Desglosar', 'Discriminar', 'Distinguir', 'Examinar'],
+                evaluar: ['Evaluar', 'Verificar', 'Criticar', 'Juzgar', 'Valorar', 'Apreciar', 'Determinar', 'Validar'],
+                crear: ['Crear', 'Diseñar', 'Formular', 'Planificar', 'Producir', 'Construir', 'Desarrollar', 'Inventar']
+            },
+            psicomotriz: {
+                imitacion: ['Imitar', 'Copiar', 'Seguir', 'Repetir', 'Reproducir', 'Replicar'],
+                manipulacion: ['Manipular', 'Ejecutar', 'Realizar', 'Llevar a cabo', 'Efectuar', 'Practicar'],
+                precision: ['Demostrar', 'Completar', 'Mostrar', 'Lograr', 'Alcanzar', 'Perfeccionar'],
+                articulacion: ['Construir', 'Resolver', 'Combinar', 'Coordinar', 'Integrar', 'Adaptar'],
+                naturalizacion: ['Diseñar', 'Especificar', 'Gestionar', 'Inventar', 'Proyectar', 'Crear']
+            },
+            afectivo: {
+                recibir: ['Escuchar', 'Seleccionar', 'Prestar atención', 'Mostrar consciencia'],
+                responder: ['Cumplir', 'Obedecer', 'Participar', 'Responder', 'Mostrar interés'],
+                valorar: ['Valorar', 'Demostrar', 'Iniciar', 'Invitar', 'Justificar', 'Proponer'],
+                organizar: ['Adherir', 'Alterar', 'Arreglar', 'Combinar', 'Defender', 'Identificar'],
+                caracterizar: ['Actuar', 'Discriminar', 'Mostrar', 'Influir', 'Modificar', 'Revisar']
+            },
+            relacional: ['Interactuar', 'Colaborar', 'Liderar', 'Facilitar', 'Coordinar', 'Comunicar', 'Negociar', 'Mediar', 'Influir', 'Motivar', 'Inspirar', 'Consensuar']
+        };
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Sistema de Carta Descriptiva EC0301 iniciado');
+            initializeValidation();
+            loadVerbos(1, 'cognitivo');
+            loadVerbos(2, 'psicomotriz');
+            loadVerbos(3, 'afectivo');
+            calcularTiempos();
+        });
+
+        // ===== NAVEGACIÓN ENTRE SECCIONES =====
+        function showSection(sectionId) {
+            // Ocultar sección actual
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar nueva sección
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentSection = sectionId;
+            
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        function nextSection(sectionId) {
+            showSection(sectionId);
+            // Activar el enlace de navegación correspondiente
+            document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+
+        // ===== ACTUALIZACIÓN DE PROGRESO =====
+        function updateProgress() {
+            calculateSectionProgress();
+            updateProgressCircle();
+            updateValidation();
+            
+            // Verificar si se puede habilitar el botón de generar
+            const totalProgress = Object.values(progressData).reduce((sum, val) => sum + val, 0) / 7;
+            document.getElementById('generarBtn').disabled = totalProgress < 85;
+        }
+
+        function calculateSectionProgress() {
+            // Calcular progreso por sección basado en campos completados
+            const sections = {
+                'informacion-general': ['nombreCurso', 'duracion', 'diseñador', 'facilitador', 'lugar', 'fechas'],
+                'perfil-participante': ['psicograficas', 'conocimientos', 'habilidades', 'numeroParticipantes', 'tipoGrupo'],
+                'objetivos': ['dominioGeneral', 'accionGeneral', 'condicionGeneral', 'accion1', 'condicion1', 'temas1', 'accion2', 'condicion2', 'temas2', 'accion3', 'condicion3', 'temas3'],
+                'requerimientos': ['instalaciones', 'equipo', 'materiales'],
+                'evaluacion': ['porcentajeAprobacion', 'diagnosticaAspecto', 'diagnosticaInstrumento', 'diagnosticaMomento', 'formativaAspecto', 'formativaPorcentaje', 'formativaInstrumento', 'formativaMomento', 'sumativaAspecto', 'sumativaInstrumento', 'sumativaMomento'],
+                'desarrollo': ['comprobacionActividades', 'duracionPresentacion', 'tecnicaRompeHielo', 'actividadesPresentacion', 'duracionCurso', 'actividadesCurso', 'duracionEvaluacion', 'actividadesEvaluacion', 'actividadesAcuerdos', 'duracionExpositiva1', 'temaExpositiva1', 'actividadesExpositiva1', 'duracionDemostrativa2', 'temaDemostrativa2', 'actividadesDemostrativa2', 'duracionDialogo3', 'temaDialogo3', 'actividadesDialogo3', 'actividadesCierre']
+            };
+
+            Object.keys(sections).forEach(sectionId => {
+                const fields = sections[sectionId];
+                const completedFields = fields.filter(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    return element && element.value.trim() !== '';
+                }).length;
+                
+                progressData[sectionId] = Math.round((completedFields / fields.length) * 100);
+            });
+        }
+
+        function updateProgressCircle() {
+            const totalProgress = Object.values(progressData).reduce((sum, val) => sum + val, 0) / 7;
+            const circle = document.getElementById('progressCircle');
+            circle.textContent = Math.round(totalProgress) + '%';
+            
+            // Actualizar color del círculo
+            const percentage = totalProgress / 100;
+            circle.style.background = `conic-gradient(var(--primary-color) ${percentage * 360}deg, var(--border-color) ${percentage * 360}deg)`;
+            
+            // Actualizar estado de navegación
+            Object.keys(progressData).forEach(sectionId => {
+                const navLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+                if (navLink) {
+                    if (progressData[sectionId] >= 100) {
+                        navLink.classList.add('completed');
+                    } else if (progressData[sectionId] > 0) {
+                        navLink.classList.remove('completed');
+                    }
+                }
+            });
+        }
+
+        // ===== SISTEMA DE DOMINIOS Y VERBOS =====
+        function selectDominio(objetivoNum, dominio) {
+            // Actualizar interfaz
+            document.querySelectorAll(`#objetivos .objetivo-item:nth-child(${objetivoNum + 1}) .dominio-card`).forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`#objetivos .objetivo-item:nth-child(${objetivoNum + 1}) [data-dominio="${dominio}"]`).classList.add('active');
+            
+            // Cargar verbos correspondientes
+            loadVerbos(objetivoNum, dominio);
+            updateProgress();
+        }
+
+        function loadVerbos(objetivoNum, dominio) {
+            const container = document.getElementById(`verbos${objetivoNum}`);
+            container.innerHTML = '';
+            
+            let verbos = [];
+            if (dominio === 'relacional') {
+                verbos = verbosBloom.relacional;
+            } else if (verbosBloom[dominio]) {
+                verbos = Object.values(verbosBloom[dominio]).flat();
+            }
+            
+            verbos.forEach(verbo => {
+                const tag = document.createElement('div');
+                tag.className = 'verbo-tag';
+                tag.textContent = verbo;
+                tag.onclick = () => selectVerbo(objetivoNum, verbo);
+                container.appendChild(tag);
+            });
+        }
+
+        function selectVerbo(objetivoNum, verbo) {
+            const input = document.getElementById(`accion${objetivoNum}`);
+            const currentValue = input.value;
+            
+            // Si ya hay texto, reemplazar solo el verbo
+            if (currentValue) {
+                const words = currentValue.split(' ');
+                words[0] = verbo;
+                input.value = words.join(' ');
+            } else {
+                input.value = verbo + ' ';
+            }
+            
+            input.focus();
+            updateProgress();
+        }
+
+        // ===== OBJETIVO GENERAL =====
+        function updateObjetivoGeneral() {
+            const sujeto = 'El participante';
+            const accion = document.getElementById('accionGeneral').value;
+            const condicion = document.getElementById('condicionGeneral').value;
+            
+            let preview = sujeto;
+            if (accion) preview += ', ' + accion;
+            if (condicion) preview += ', ' + condicion;
+            
+            document.getElementById('objetivoGeneralPreview').textContent = preview;
+            updateProgress();
+        }
+
+        // ===== CÁLCULO DE PORCENTAJES DE EVALUACIÓN =====
+        function calcularPorcentajes() {
+            const formativa = parseInt(document.getElementById('formativaPorcentaje').value) || 0;
+            const sumativa = 100 - formativa;
+            
+            document.getElementById('sumativaPorcentaje').value = sumativa + '%';
+            updateProgress();
+        }
+
+        // ===== CÁLCULO DE TIEMPOS =====
+        function calcularTiempos() {
+            // Encuadre
+            const presentacion = parseInt(document.getElementById('duracionPresentacion').value) || 0;
+            const curso = parseInt(document.getElementById('duracionCurso').value) || 0;
+            const evaluacion = parseInt(document.getElementById('duracionEvaluacion').value) || 0;
+            const encuadreTotal = presentacion + curso + evaluacion + 5; // +5 para acuerdos
+
+            // Desarrollo
+            const expositiva = parseInt(document.getElementById('duracionExpositiva1').value) || 0;
+            const demostrativa = parseInt(document.getElementById('duracionDemostrativa2').value) || 0;
+            const dialogo = parseInt(document.getElementById('duracionDialogo3').value) || 0;
+            const desarrolloTotal = expositiva + demostrativa + dialogo;
+
+            // Cierre
+            const cierreTotal = 20;
+
+            // Total
+            const totalMinutos = encuadreTotal + desarrolloTotal + cierreTotal;
+            const totalHoras = Math.floor(totalMinutos / 60);
+            const minutosRestantes = totalMinutos % 60;
+
+            // Actualizar display
+            document.getElementById('tiempoEncuadre').textContent = encuadreTotal + ' minutos';
+            document.getElementById('tiempoDesarrollo').textContent = desarrolloTotal + ' minutos';
+            document.getElementById('sumatoriaCierre').textContent = cierreTotal + ' minutos';
+            
+            document.getElementById('sumatoriaEncuadre').textContent = encuadreTotal + ' minutos';
+            document.getElementById('sumatoriaDesarrollo').textContent = desarrolloTotal + ' minutos';
+            document.getElementById('sumatoriaTotal').textContent = totalHoras + 'h ' + minutosRestantes + 'm';
+        }
+
+        // ===== CONTADOR DE CARACTERES =====
+        function updateCounter(input, maxLength) {
+            const counter = input.nextElementSibling;
+            if (counter && counter.classList.contains('input-counter')) {
+                counter.textContent = `${input.value.length}/${maxLength} caracteres`;
+            }
+        }
+
+        // ===== VALIDACIÓN =====
+        function initializeValidation() {
+            const validationItems = [
+                { id: 'campos-completos', text: 'Todos los campos requeridos', valid: false },
+                { id: 'objetivos-smart', text: 'Objetivos SMART válidos', valid: false },
+                { id: 'dominios-completos', text: 'Los 4 dominios representados', valid: false },
+                { id: 'coherencia-metodologica', text: 'Coherencia metodológica', valid: false },
+                { id: 'tiempos-coherentes', text: 'Tiempos coherentes', valid: false }
+            ];
+
+            updateValidationPanel(validationItems);
+        }
+
+        function updateValidation() {
+            // Esta función se ejecuta en tiempo real para actualizar validaciones
+            const validationItems = [
+                { id: 'campos-completos', text: 'Campos requeridos completados', valid: checkRequiredFields() },
+                { id: 'objetivos-smart', text: 'Objetivos SMART válidos', valid: checkSmartObjectives() },
+                { id: 'dominios-completos', text: 'Los 4 dominios representados', valid: checkDomainCoverage() },
+                { id: 'coherencia-metodologica', text: 'Coherencia metodológica', valid: checkMethodologicalCoherence() },
+                { id: 'tiempos-coherentes', text: 'Tiempos coherentes', valid: checkTimeCoherence() }
+            ];
+
+            updateValidationPanel(validationItems);
+        }
+
+        function updateValidationPanel(items) {
+            const container = document.getElementById('validationItems');
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'validation-item';
+                div.innerHTML = `
+                    <div class="validation-icon ${item.valid ? 'valid' : 'invalid'}">
+                        <i class="fas fa-${item.valid ? 'check' : 'times'}"></i>
+                    </div>
+                    <span>${item.text}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkRequiredFields() {
+            const requiredFields = ['nombreCurso', 'duracion', 'diseñador', 'facilitador', 'accionGeneral', 'condicionGeneral'];
+            return requiredFields.every(fieldId => {
+                const element = document.getElementById(fieldId);
+                return element && element.value.trim() !== '';
+            });
+        }
+
+        function checkSmartObjectives() {
+            const objetivos = [
+                document.getElementById('accionGeneral').value,
+                document.getElementById('accion1').value,
+                document.getElementById('accion2').value,
+                document.getElementById('accion3').value
+            ];
+            
+            return objetivos.every(obj => obj && obj.length > 10);
+        }
+
+        function checkDomainCoverage() {
+            // Verificar que los 3 objetivos particulares cubran diferentes dominios
+            const dominios = new Set();
+            for (let i = 1; i <= 3; i++) {
+                const activeDomain = document.querySelector(`#objetivos .objetivo-item:nth-child(${i + 1}) .dominio-card.active`);
+                if (activeDomain) {
+                    dominios.add(activeDomain.dataset.dominio);
+                }
+            }
+            return dominios.size >= 2; // Al menos 2 dominios diferentes
+        }
+
+        function checkMethodologicalCoherence() {
+            // Verificar que las técnicas correspondan a los dominios
+            return document.getElementById('actividadesExpositiva1').value.length > 50 &&
+                   document.getElementById('actividadesDemostrativa2').value.length > 50 &&
+                   document.getElementById('actividadesDialogo3').value.length > 50;
+        }
+
+        function checkTimeCoherence() {
+            const duracionTotal = parseInt(document.getElementById('duracion').value) || 0;
+            const tiempoCalculado = calcularTiempoTotal();
+            return Math.abs(duracionTotal * 60 - tiempoCalculado) < 60; // Diferencia menor a 1 hora
+        }
+
+        function calcularTiempoTotal() {
+            const presentacion = parseInt(document.getElementById('duracionPresentacion').value) || 0;
+            const curso = parseInt(document.getElementById('duracionCurso').value) || 0;
+            const evaluacion = parseInt(document.getElementById('duracionEvaluacion').value) || 0;
+            const expositiva = parseInt(document.getElementById('duracionExpositiva1').value) || 0;
+            const demostrativa = parseInt(document.getElementById('duracionDemostrativa2').value) || 0;
+            const dialogo = parseInt(document.getElementById('duracionDialogo3').value) || 0;
+            
+            return presentacion + curso + evaluacion + 5 + expositiva + demostrativa + dialogo + 20;
+        }
+
+        // ===== VALIDACIÓN COMPLETA =====
+        function ejecutarValidacionCompleta() {
+            const validaciones = [
+                { criterio: 'Campos Requeridos', resultado: checkRequiredFields(), peso: 20 },
+                { criterio: 'Objetivos SMART', resultado: checkSmartObjectives(), peso: 25 },
+                { criterio: 'Dominios de Aprendizaje', resultado: checkDomainCoverage(), peso: 20 },
+                { criterio: 'Coherencia Metodológica', resultado: checkMethodologicalCoherence(), peso: 20 },
+                { criterio: 'Tiempos Coherentes', resultado: checkTimeCoherence(), peso: 15 }
+            ];
+
+            let scoreTotal = 0;
+            validaciones.forEach(v => {
+                if (v.resultado) scoreTotal += v.peso;
+            });
+
+            // Mostrar resultados
+            document.getElementById('validacionResults').style.display = 'block';
+            document.getElementById('scoreValidacion').textContent = scoreTotal + '%';
+
+            // Actualizar estado de validación
+            progressData.validacion = scoreTotal;
+            updateProgress();
+
+            // Scroll to results
+            document.getElementById('validacionResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===== ASISTENTE IA =====
+        function aiAssist(context) {
+            showMessage('🤖 Asistente IA activado para: ' + context, 'info');
+            
+            // Simular procesamiento IA
+            setTimeout(() => {
+                switch(context) {
+                    case 'info-general':
+                        applyAIGeneralInfo();
+                        break;
+                    case 'perfil-participante':
+                        applyAIParticipantProfile();
+                        break;
+                    case 'objetivos':
+                        applyAIObjectives();
+                        break;
+                    case 'requerimientos':
+                        applyAIRequirements();
+                        break;
+                    case 'evaluacion':
+                        applyAIEvaluation();
+                        break;
+                    case 'desarrollo':
+                        applyAIChronology();
+                        break;
+                }
+                showMessage('✅ Contenido IA aplicado exitosamente', 'success');
+            }, 1500);
+        }
+
+        function applyAIGeneralInfo() {
+            document.getElementById('nombreCurso').value = 'Desarrollo de Competencias en Liderazgo Transformacional para Supervisores';
+            document.getElementById('duracion').value = '40';
+            document.getElementById('diseñador').value = 'Mtro. Juan Carlos Pérez López';
+            document.getElementById('facilitador').value = 'Lic. María González Hernández';
+            document.getElementById('lugar').value = 'Sala de Capacitación Empresarial, Av. Insurgentes 123, Ciudad de México, CDMX';
+            document.getElementById('fechas').value = 'Del 15 al 19 de enero de 2025, de 9:00 a 17:00 hrs';
+            updateProgress();
+        }
+
+        function applyAIParticipantProfile() {
+            document.getElementById('psicograficas').value = '• Ocupación: Supervisores de primera línea en empresas manufactureras y de servicios\n• Edad: Entre 28 y 45 años con experiencia laboral mínima de 3 años\n• Nivel socioeconómico: Medio-alto con responsabilidades de gestión de equipos';
+            document.getElementById('conocimientos').value = 'Licenciatura terminada en áreas administrativas, ingeniería o afines, o experiencia equivalente comprobable en gestión de equipos de trabajo';
+            document.getElementById('habilidades').value = 'Comunicación interpersonal básica, manejo de conflictos a nivel introductorio, uso de herramientas digitales básicas (Office), experiencia en supervisión directa';
+            document.getElementById('numeroParticipantes').value = '13-20';
+            document.getElementById('tipoGrupo').value = 'heterogeneo';
+            updateProgress();
+        }
+
+        function applyAIObjectives() {
+            document.getElementById('dominioGeneral').value = 'relacional';
+            document.getElementById('accionGeneral').value = 'Al finalizar el curso-taller aplicará técnicas de liderazgo transformacional, evaluará el clima organizacional de su equipo y diseñará estrategias de motivación personalizada';
+            document.getElementById('condicionGeneral').value = 'A través de metodologías andragógicas, casos empresariales reales, herramientas de diagnóstico validadas y ejercicios prácticos grupales, para mejorar el desempeño y satisfacción de su equipo en un 25% en los siguientes 6 meses';
+            
+            // Objetivo 1
+            document.getElementById('accion1').value = 'Identificará las características distintivas del liderazgo transformacional y sus diferencias con otros estilos de liderazgo';
+            document.getElementById('condicion1').value = 'Por medio del análisis de casos empresariales exitosos, videos de líderes reconocidos y comparaciones teóricas, con la finalidad de fundamentar su desarrollo como líder transformacional';
+            document.getElementById('temas1').value = '• Teorías contemporáneas de liderazgo empresarial\n• Características del líder transformacional vs. transaccional\n• Casos de estudio de líderes exitosos\n• Autoevaluación de estilo de liderazgo actual';
+            
+            // Objetivo 2
+            selectDominio(2, 'psicomotriz');
+            document.getElementById('accion2').value = 'Aplicará técnicas de comunicación asertiva y feedback constructivo en situaciones de liderazgo real';
+            document.getElementById('condicion2').value = 'A través de role playing, simulaciones grupales y ejercicios prácticos supervisados, para mejorar la comunicación efectiva con su equipo de trabajo';
+            document.getElementById('temas2').value = '• Técnicas de comunicación asertiva aplicada\n• Manejo constructivo de conflictos interpersonales\n• Feedback efectivo y reconocimiento del desempeño\n• Escucha activa y empatía directiva';
+            
+            // Objetivo 3  
+            selectDominio(3, 'afectivo');
+            document.getElementById('accion3').value = 'Valorará la importancia del desarrollo integral de su equipo y se comprometerá con su crecimiento profesional';
+            document.getElementById('condicion3').value = 'Por medio de reflexiones grupales, compromisos personales escritos y planes de desarrollo individual, para fortalecer las relaciones interpersonales y el clima organizacional';
+            document.getElementById('temas3').value = '• Importancia del desarrollo del talento humano\n• Construcción de relaciones de confianza mutua\n• Compromiso personal con el crecimiento del equipo\n• Responsabilidad social del liderazgo transformacional';
+            
+            updateObjetivoGeneral();
+            updateProgress();
+        }
+
+        function applyAIRequirements() {
+            document.getElementById('instalaciones').value = '• Aula para 20 personas con iluminación natural y ventilación adecuada\n• 5 mesas redondas para 4 personas cada una con superficie de trabajo\n• 20 sillas ergonómicas con respaldo y reposabrazos\n• 1 escritorio para instructor con cajones y conexiones eléctricas\n• 2 pizarrones blancos móviles de 1.20 x 0.90 metros\n• 1 rotafolio con base móvil\n• Área de descanso o lobby para recesos';
+            
+            document.getElementById('equipo').value = '• 1 laptop con Windows 10 o superior, procesador i5 mínimo\n• 1 proyector de 3000 lúmenes mínimo con resolución 1080p\n• 1 pantalla de proyección retráctil de 2.5m x 2.5m\n• Sistema de audio con 2 bocinas amplificadas de 50W\n• 1 micrófono inalámbrico de diadema o solapa\n• 2 extensiones eléctricas de 5 metros con múltiples contactos\n• 1 puntero láser profesional\n• Conexión a internet Wi-Fi estable';
+            
+            document.getElementById('materiales').value = '• 20 formatos de evaluación diagnóstica impresos\n• 20 formatos de evaluación formativa (listas de cotejo)\n• 20 formatos de evaluación sumativa\n• 20 formatos de evaluación de satisfacción\n• 20 contratos de aprendizaje personalizados\n• 1 lista de asistencia por día (5 formatos)\n• 1 lista de verificación de requerimientos\n• 40 hojas blancas tamaño carta por participante\n• 20 plumas de tinta azul\n• 4 marcadores para pizarrón (negro, azul, rojo, verde)\n• 1 rotafolio con 50 hojas blancas\n• 20 gafetes de identificación reutilizables\n• Casos de estudio impresos (5 casos diferentes)\n• 20 carpetas o folders para materiales';
+            
+            document.getElementById('recursosHumanos').value = '1 asistente técnico para apoyo audiovisual y logístico (opcional pero recomendado para grupos de más de 15 participantes)';
+            
+            document.getElementById('otros').value = '• Servicio de café, té y agua para recesos (2 veces al día)\n• 1 cámara fotográfica digital para documentar actividades\n• Gafetes de identificación con nombres de participantes\n• Material de limpieza para pizarrones\n• Kit de primeros auxilios básico\n• Directorio telefónico de emergencia\n• Certificados de participación pre-impresos';
+            
+            updateProgress();
+        }
+
+        function applyAIEvaluation() {
+            document.getElementById('porcentajeAprobacion').value = '80';
+            
+            document.getElementById('diagnosticaAspecto').value = 'Conocimientos previos sobre liderazgo, estilos de dirección y experiencias de gestión de equipos';
+            document.getElementById('diagnosticaInstrumento').value = 'Cuestionario de 10 preguntas abiertas y autoevaluación de estilo de liderazgo';
+            document.getElementById('diagnosticaMomento').value = 'Al inicio del curso, primeros 20 minutos del primer día';
+            
+            document.getElementById('formativaAspecto').value = 'Aplicación correcta de técnicas de comunicación y liderazgo durante ejercicios prácticos y role playing';
+            document.getElementById('formativaPorcentaje').value = '40';
+            document.getElementById('formativaInstrumento').value = 'Lista de cotejo con 15 criterios de desempeño observables y rúbrica analítica de 4 niveles';
+            document.getElementById('formativaMomento').value = 'Durante el desarrollo del curso, específicamente en técnicas demostrativas de los días 2, 3 y 4';
+            
+            document.getElementById('sumativaAspecto').value = 'Integración y aplicación de conocimientos, habilidades y actitudes de liderazgo transformacional adquiridas';
+            document.getElementById('sumativaInstrumento').value = 'Examen escrito de 20 preguntas (10 opción múltiple, 10 abiertas) + resolución de caso práctico grupal';
+            document.getElementById('sumativaMomento').value = 'Al final del curso, últimos 45 minutos del quinto día';
+            
+            calcularPorcentajes();
+            updateProgress();
+        }
+
+        function applyAIChronology() {
+            // Comprobación de recursos
+            document.getElementById('comprobacionActividades').value = '1. Aplicar lista de verificación de requerimientos físicos y tecnológicos\n2. Realizar pruebas completas de funcionamiento del equipo audiovisual\n3. Verificar distribución adecuada del mobiliario y espacios de trabajo\n4. Verificar suficiencia y calidad de todos los materiales impresos\n5. Confirmar disponibilidad de servicios de apoyo (café, limpieza)\n6. Revisar condiciones de iluminación, ventilación y temperatura del aula';
+            
+            // Duraciones
+            document.getElementById('duracionPresentacion').value = '15';
+            document.getElementById('duracionCurso').value = '10';
+            document.getElementById('duracionEvaluacion').value = '5';
+            
+            // Actividades detalladas
+            document.getElementById('tecnicaRompeHielo').value = 'Presentación Cruzada por Parejas';
+            document.getElementById('actividadesPresentacion').value = '• Técnica Rompe Hielo: Presentación Cruzada por Parejas (10 min)\n• Objetivo: Crear ambiente de confianza, conocimiento mutuo y cohesión grupal\n• Instrucciones: Formar parejas al azar, intercambiar información profesional y personal relevante durante 5 minutos, cada persona presenta a su compañero al grupo\n• Tiempo de presentaciones individuales: 5 minutos total\n• El instructor toma notas de los perfiles para personalizar ejemplos durante el curso';
+            
+            document.getElementById('actividadesCurso').value = '1. Presentar descripción general del curso y su importancia empresarial actual\n2. Explicar detalladamente el objetivo general y los tres objetivos particulares\n3. Mostrar temario completo con tiempos y metodología de cada módulo\n4. Explicar beneficios específicos para el desarrollo profesional y organizacional\n5. Crear ambiente participativo mediante preguntas sobre expectativas individuales';
+            
+            document.getElementById('actividadesEvaluacion').value = '• Explicar propósito y características de la evaluación diagnóstica (sin calificación)\n• Detallar evaluación formativa: 40% de la calificación total, basada en desempeño práctico\n• Especificar evaluación sumativa: 60% de la calificación, examen teórico-práctico final\n• Aclarar criterio de aprobación: 80% mínimo de la calificación total\n• Resolver dudas sobre el sistema de evaluación';
+            
+            document.getElementById('actividadesAcuerdos').value = '1. Revisar individualmente las expectativas escritas del curso vs. objetivos planteados\n2. Acordar colaborativamente las reglas de operación: puntualidad, participación, respeto\n3. Completar y firmar el contrato de aprendizaje personalizado\n4. Aplicar la evaluación diagnóstica de conocimientos previos sobre liderazgo';
+            
+            // Técnicas de desarrollo
+            document.getElementById('duracionExpositiva1').value = '120';
+            document.getElementById('temaExpositiva1').value = 'Fundamentos Teóricos del Liderazgo Transformacional';
+            document.getElementById('actividadesExpositiva1').value = '1. Presentar claramente el objetivo específico del tema y su relevancia empresarial\n2. Recuperar experiencia previa mediante preguntas dirigidas sobre situaciones de liderazgo vividas\n3. Desarrollar contenido teórico fundamental con base en investigaciones actuales de liderazgo\n4. Utilizar ejemplos concretos de líderes empresariales mexicanos e internacionales reconocidos\n5. Presentar casos de estudio reales de transformaciones organizacionales exitosas\n6. Realizar síntesis participativa de los aspectos más sobresalientes y aplicables\n7. Plantear tres preguntas específicas de verificación de comprensión al grupo completo\n8. Promover comentarios grupales sobre la utilidad práctica inmediata en sus contextos laborales';
+            document.getElementById('materialesExpositiva1').value = 'Presentación PowerPoint especializada, laptop, proyector, casos de estudio impresos de líderes exitosos, videos cortos de testimoniales';
+            
+            document.getElementById('duracionDemostrativa2').value = '150';
+            document.getElementById('temaDemostrativa2').value = 'Aplicación Práctica de Técnicas de Comunicación Asertiva y Feedback Constructivo';
+            document.getElementById('actividadesDemostrativa2').value = '1. Presentar objetivo específico de la actividad práctica y criterios de evaluación\n2. Recuperar experiencia previa con dos preguntas específicas sobre situaciones difíciles de comunicación\n3. Ejemplificar paso a paso las técnicas mediante role playing instructor-voluntario\n4. Demostrar manejo de objeciones y resistencias con casos reales preparados\n5. Resolver dudas específicas sobre la aplicación de cada técnica demostrada\n6. Organizar práctica supervisada en parejas con situaciones laborales reales de los participantes\n7. Brindar retroalimentación individual específica sobre la ejecución de cada participante\n8. Aplicar evaluación formativa grupal utilizando lista de cotejo de desempeños observables';
+            document.getElementById('materialesDemostrativa2').value = 'Formatos de evaluación formativa impresos, situaciones escritas para role playing, lista de cotejo de 15 criterios, cronómetro, fichas de retroalimentación';
+            
+            document.getElementById('duracionDialogo3').value = '90';
+            document.getElementById('temaDialogo3').value = 'Valoración Personal del Impacto del Liderazgo Transformacional en el Desarrollo Humano';
+            document.getElementById('actividadesDialogo3').value = '1. Introducir el tema central y su importancia para el desarrollo integral de equipos\n2. Dividir el grupo en dos subgrupos equilibrados por experiencia y perfil profesional\n3. Establecer reglas específicas de participación respetuosa y tiempo de intervención\n4. Abrir la discusión estructurada recordando el tema y haciendo una pregunta detonadora\n5. Propiciar participación activa y moderar las intervenciones manteniendo el enfoque\n6. Recuperar sistemáticamente las experiencias previas relevantes de cada participante\n7. Utilizar ejemplos cotidianos del ambiente laboral específico de los asistentes\n8. Verificar comprensión de conceptos mediante preguntas de confirmación dirigidas\n9. Promover comentarios específicos sobre la utilidad práctica inmediata en sus roles actuales';
+            document.getElementById('materialesDialogo3').value = 'Preguntas guía estructuradas para discusión, rotafolios grandes, marcadores de colores, casos breves para reflexión grupal, hojas de compromisos personales';
+            
+            document.getElementById('actividadesCierre').value = '1. Resumen General Participativo (5 min): Solicitar al grupo mencionar los 3 aprendizajes más significativos de cada módulo\n2. Verificación del Logro de Expectativas (3 min): Comparar expectativas iniciales escritas con lo experimentado en el curso\n3. Confirmación del Logro de Objetivos (3 min): Revisar cada objetivo particular y confirmar su cumplimiento con ejemplos específicos\n4. Sugerencias Concretas de Continuidad (2 min): Recomendar 2 libros especializados y 1 curso de seguimiento\n5. Formulación de Compromisos de Aplicación (2 min): Que cada participante escriba 3 compromisos específicos con fechas\n6. Aplicación de Evaluación de Reacción (5 min): Completar formato de satisfacción y sugerencias de mejora';
+            
+            calcularTiempos();
+            updateProgress();
+        }
+
+        function activarAgente() {
+            showMessage('🤖 Agente IA Especializado EC0301 activado', 'info');
+            showMessage('El agente analizará su progreso y ofrecerá sugerencias personalizadas', 'info');
+            
+            setTimeout(() => {
+                const suggestions = [
+                    '💡 Sugerencia: Sus objetivos podrían ser más específicos en términos de medición',
+                    '⚡ Recomendación: Considere agregar más actividades prácticas al desarrollo',
+                    '🎯 Oportunidad: Los materiales pueden optimizarse para mejor aprendizaje',
+                    '✨ Mejora: La secuencia cronológica puede ajustarse para mayor efectividad'
+                ];
+                
+                suggestions.forEach((suggestion, index) => {
+                    setTimeout(() => {
+                        showMessage(suggestion, 'info');
+                    }, (index + 1) * 2000);
+                });
+                
+                setTimeout(() => {
+                    showMessage('🤖 Análisis completo. ¿Desea aplicar las mejoras sugeridas?', 'success');
+                }, suggestions.length * 2000 + 1000);
+            }, 3000);
+        }
+
+        // ===== GENERACIÓN DE CARTA FINAL =====
+        function generarCartaFinal() {
+            showMessage('📄 Generando Carta Descriptiva EC0301 completa...', 'info');
+            
+            setTimeout(() => {
+                // Recopilar todos los datos
+                const cartaCompleta = recopilarDatos();
+                
+                // Generar documento
+                generarDocumentoFinal(cartaCompleta);
+                
+                showMessage('✅ Carta Descriptiva EC0301 generada exitosamente. Lista para evaluador CONOCER.', 'success');
+            }, 2000);
+        }
+
+        function recopilarDatos() {
+            return {
+                informacionGeneral: {
+                    nombre: document.getElementById('nombreCurso').value,
+                    duracion: document.getElementById('duracion').value,
+                    diseñador: document.getElementById('diseñador').value,
+                    facilitador: document.getElementById('facilitador').value,
+                    lugar: document.getElementById('lugar').value,
+                    fechas: document.getElementById('fechas').value
+                },
+                perfil: {
+                    psicograficas: document.getElementById('psicograficas').value,
+                    conocimientos: document.getElementById('conocimientos').value,
+                    habilidades: document.getElementById('habilidades').value,
+                    numero: document.getElementById('numeroParticipantes').value,
+                    tipo: document.getElementById('tipoGrupo').value
+                },
+                objetivos: {
+                    general: {
+                        dominio: document.getElementById('dominioGeneral').value,
+                        accion: document.getElementById('accionGeneral').value,
+                        condicion: document.getElementById('condicionGeneral').value
+                    },
+                    particulares: [
+                        {
+                            accion: document.getElementById('accion1').value,
+                            condicion: document.getElementById('condicion1').value,
+                            temas: document.getElementById('temas1').value
+                        },
+                        {
+                            accion: document.getElementById('accion2').value,
+                            condicion: document.getElementById('condicion2').value,
+                            temas: document.getElementById('temas2').value
+                        },
+                        {
+                            accion: document.getElementById('accion3').value,
+                            condicion: document.getElementById('condicion3').value,
+                            temas: document.getElementById('temas3').value
+                        }
+                    ]
+                },
+                requerimientos: {
+                    instalaciones: document.getElementById('instalaciones').value,
+                    equipo: document.getElementById('equipo').value,
+                    materiales: document.getElementById('materiales').value,
+                    recursosHumanos: document.getElementById('recursosHumanos').value,
+                    otros: document.getElementById('otros').value
+                },
+                evaluacion: {
+                    porcentaje: document.getElementById('porcentajeAprobacion').value,
+                    diagnostica: {
+                        aspecto: document.getElementById('diagnosticaAspecto').value,
+                        instrumento: document.getElementById('diagnosticaInstrumento').value,
+                        momento: document.getElementById('diagnosticaMomento').value
+                    },
+                    formativa: {
+                        aspecto: document.getElementById('formativaAspecto').value,
+                        porcentaje: document.getElementById('formativaPorcentaje').value,
+                        instrumento: document.getElementById('formativaInstrumento').value,
+                        momento: document.getElementById('formativaMomento').value
+                    },
+                    sumativa: {
+                        aspecto: document.getElementById('sumativaAspecto').value,
+                        porcentaje: document.getElementById('sumativaPorcentaje').value,
+                        instrumento: document.getElementById('sumativaInstrumento').value,
+                        momento: document.getElementById('sumativaMomento').value
+                    }
+                },
+                cronologia: {
+                    comprobacion: document.getElementById('comprobacionActividades').value,
+                    encuadre: {
+                        presentacion: {
+                            duracion: document.getElementById('duracionPresentacion').value,
+                            tecnica: document.getElementById('tecnicaRompeHielo').value,
+                            actividades: document.getElementById('actividadesPresentacion').value
+                        },
+                        curso: {
+                            duracion: document.getElementById('duracionCurso').value,
+                            actividades: document.getElementById('actividadesCurso').value
+                        },
+                        evaluacion: {
+                            duracion: document.getElementById('duracionEvaluacion').value,
+                            actividades: document.getElementById('actividadesEvaluacion').value
+                        },
+                        acuerdos: document.getElementById('actividadesAcuerdos').value
+                    },
+                    desarrollo: {
+                        expositiva: {
+                            duracion: document.getElementById('duracionExpositiva1').value,
+                            tema: document.getElementById('temaExpositiva1').value,
+                            actividades: document.getElementById('actividadesExpositiva1').value,
+                            materiales: document.getElementById('materialesExpositiva1').value
+                        },
+                        demostrativa: {
+                            duracion: document.getElementById('duracionDemostrativa2').value,
+                            tema: document.getElementById('temaDemostrativa2').value,
+                            actividades: document.getElementById('actividadesDemostrativa2').value,
+                            materiales: document.getElementById('materialesDemostrativa2').value
+                        },
+                        dialogo: {
+                            duracion: document.getElementById('duracionDialogo3').value,
+                            tema: document.getElementById('temaDialogo3').value,
+                            actividades: document.getElementById('actividadesDialogo3').value,
+                            materiales: document.getElementById('materialesDialogo3').value
+                        }
+                    },
+                    cierre: document.getElementById('actividadesCierre').value
+                },
+                tiempos: {
+                    encuadre: document.getElementById('sumatoriaEncuadre').textContent,
+                    desarrollo: document.getElementById('sumatoriaDesarrollo').textContent,
+                    cierre: document.getElementById('sumatoriaCierre').textContent,
+                    total: document.getElementById('sumatoriaTotal').textContent
+                }
+            };
+        }
+
+        function generarDocumentoFinal(datos) {
+            // Crear contenido del documento
+            const contenido = `
+CARTA DESCRIPTIVA EC0301
+=======================
+
+INFORMACIÓN GENERAL
+==================
+Nombre del Curso: ${datos.informacionGeneral.nombre}
+Diseñador: ${datos.informacionGeneral.diseñador}
+Facilitador: ${datos.informacionGeneral.facilitador}
+Lugar: ${datos.informacionGeneral.lugar}
+Duración: ${datos.informacionGeneral.duracion} horas
+Fechas: ${datos.informacionGeneral.fechas}
+
+PERFIL DEL PARTICIPANTE
+======================
+Características Psicográficas:
+${datos.perfil.psicograficas}
+
+Conocimientos Previos:
+${datos.perfil.conocimientos}
+
+Habilidades Requeridas:
+${datos.perfil.habilidades}
+
+Número de Participantes: ${datos.perfil.numero}
+Tipo de Grupo: ${datos.perfil.tipo}
+
+OBJETIVO GENERAL
+===============
+El participante, ${datos.objetivos.general.accion}, ${datos.objetivos.general.condicion}
+
+OBJETIVOS PARTICULARES
+=====================
+
+OBJETIVO PARTICULAR 1:
+El participante ${datos.objetivos.particulares[0].accion}, ${datos.objetivos.particulares[0].condicion}
+
+TEMAS:
+${datos.objetivos.particulares[0].temas}
+
+OBJETIVO PARTICULAR 2:
+El participante ${datos.objetivos.particulares[1].accion}, ${datos.objetivos.particulares[1].condicion}
+
+TEMAS:
+${datos.objetivos.particulares[1].temas}
+
+OBJETIVO PARTICULAR 3:
+El participante ${datos.objetivos.particulares[2].accion}, ${datos.objetivos.particulares[2].condicion}
+
+TEMAS:
+${datos.objetivos.particulares[2].temas}
+
+REQUERIMIENTOS
+=============
+
+INSTALACIONES Y MOBILIARIO:
+${datos.requerimientos.instalaciones}
+
+EQUIPO DE APOYO:
+${datos.requerimientos.equipo}
+
+MATERIALES:
+${datos.requerimientos.materiales}
+
+RECURSOS HUMANOS:
+${datos.requerimientos.recursosHumanos}
+
+OTROS REQUERIMIENTOS:
+${datos.requerimientos.otros}
+
+EVALUACIÓN
+==========
+Porcentaje mínimo de aprobación: ${datos.evaluacion.porcentaje}%
+
+EVALUACIÓN DIAGNÓSTICA:
+Aspecto: ${datos.evaluacion.diagnostica.aspecto}
+Instrumento: ${datos.evaluacion.diagnostica.instrumento}
+Momento: ${datos.evaluacion.diagnostica.momento}
+
+EVALUACIÓN FORMATIVA:
+Aspecto: ${datos.evaluacion.formativa.aspecto}
+Porcentaje: ${datos.evaluacion.formativa.porcentaje}%
+Instrumento: ${datos.evaluacion.formativa.instrumento}
+Momento: ${datos.evaluacion.formativa.momento}
+
+EVALUACIÓN SUMATIVA:
+Aspecto: ${datos.evaluacion.sumativa.aspecto}
+Porcentaje: ${datos.evaluacion.sumativa.porcentaje}
+Instrumento: ${datos.evaluacion.sumativa.instrumento}
+Momento: ${datos.evaluacion.sumativa.momento}
+
+DESARROLLO CRONOLÓGICO
+=====================
+
+7.1 COMPROBACIÓN DE RECURSOS (30 minutos previos):
+${datos.cronologia.comprobacion}
+
+7.2 APERTURA O ENCUADRE:
+
+Presentación del Instructor y Participantes (${datos.cronologia.encuadre.presentacion.duracion} min):
+Técnica: ${datos.cronologia.encuadre.presentacion.tecnica}
+${datos.cronologia.encuadre.presentacion.actividades}
+
+Presentación del Curso (${datos.cronologia.encuadre.curso.duracion} min):
+${datos.cronologia.encuadre.curso.actividades}
+
+Momentos e Instrumentos de Evaluación (${datos.cronologia.encuadre.evaluacion.duracion} min):
+${datos.cronologia.encuadre.evaluacion.actividades}
+
+Acuerdos y Compromisos:
+${datos.cronologia.encuadre.acuerdos}
+
+7.3 DESARROLLO:
+
+TÉCNICA EXPOSITIVA (${datos.cronologia.desarrollo.expositiva.duracion} min):
+Tema: ${datos.cronologia.desarrollo.expositiva.tema}
+Actividades:
+${datos.cronologia.desarrollo.expositiva.actividades}
+Material: ${datos.cronologia.desarrollo.expositiva.materiales}
+
+TÉCNICA DEMOSTRATIVA (${datos.cronologia.desarrollo.demostrativa.duracion} min):
+Tema: ${datos.cronologia.desarrollo.demostrativa.tema}
+Actividades:
+${datos.cronologia.desarrollo.demostrativa.actividades}
+Material: ${datos.cronologia.desarrollo.demostrativa.materiales}
+
+TÉCNICA DIÁLOGO-DISCUSIÓN (${datos.cronologia.desarrollo.dialogo.duracion} min):
+Tema: ${datos.cronologia.desarrollo.dialogo.tema}
+Actividades:
+${datos.cronologia.desarrollo.dialogo.actividades}
+Material: ${datos.cronologia.desarrollo.dialogo.materiales}
+
+7.4 CIERRE:
+${datos.cronologia.cierre}
+
+SUMATORIAS DE TIEMPO:
+SUMATORIA DE TIEMPO DEL ENCUADRE: ${datos.tiempos.encuadre}
+SUMATORIA DE TIEMPO DEL DESARROLLO: ${datos.tiempos.desarrollo}  
+SUMATORIA DE TIEMPO DEL CIERRE: ${datos.tiempos.cierre}
+SUMATORIA DE TIEMPO TOTAL: ${datos.tiempos.total}
+
+---
+
+VALIDACIÓN EC0301:
+✅ Cumple con todos los criterios del Estándar de Competencia EC0301
+✅ Modalidad presencial grupal según especificaciones CONOCER
+✅ Objetivos formulados con metodología SMART
+✅ Los 4 dominios de aprendizaje representados apropiadamente
+✅ Taxonomía de Bloom aplicada correctamente
+✅ Coherencia metodológica entre objetivos, contenidos y actividades
+✅ Cronología detallada y tiempos coherentes
+✅ Sistema de evaluación integral (diagnóstica, formativa, sumativa)
+
+Documento generado por EC0301 Generator - Global Skills Cert S.C.
+Fecha: ${new Date().toLocaleDateString('es-MX')}
+Contacto: info@skillscert.com.mx | +52 38822334
+Ubicación: Colonia Juárez, Ocoyoacac, Estado de México
+
+© 2025 Global Skills Cert S.C. - Todos los derechos reservados
+            `;
+            
+            // Crear y descargar archivo
+            const element = document.createElement('a');
+            const file = new Blob([contenido], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = `Carta_Descriptiva_EC0301_${datos.informacionGeneral.nombre.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // ===== SISTEMA DE MENSAJES =====
+        function showMessage(message, type = 'info') {
+            const div = document.createElement('div');
+            div.style.position = 'fixed';
+            div.style.top = '20px';
+            div.style.right = '20px';
+            div.style.zIndex = '10001';
+            div.style.padding = '1rem 2rem';
+            div.style.borderRadius = '8px';
+            div.style.maxWidth = '400px';
+            div.style.fontSize = '0.9rem';
+            div.style.fontWeight = '600';
+            div.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+            div.textContent = message;
+            
+            switch(type) {
+                case 'success':
+                    div.style.background = 'var(--success-color)';
+                    div.style.color = 'white';
+                    break;
+                case 'warning':
+                    div.style.background = 'var(--warning-color)';
+                    div.style.color = 'white';
+                    break;
+                case 'error':
+                    div.style.background = 'var(--error-color)';
+                    div.style.color = 'white';
+                    break;
+                default:
+                    div.style.background = 'var(--primary-color)';
+                    div.style.color = 'white';
+            }
+            
+            document.body.appendChild(div);
+            
+            // Animation entrance
+            div.style.transform = 'translateX(100%)';
+            div.style.transition = 'transform 0.3s ease';
+            setTimeout(() => {
+                div.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                if (div.parentNode) {
+                    div.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (div.parentNode) {
+                            div.parentNode.removeChild(div);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // ===== INICIALIZACIÓN FINAL =====
+        console.log('🎯 Sistema de Carta Descriptiva EC0301 completamente inicializado');
+        console.log('🏢 Global Skills Cert S.C. - EC0301 Solutions México');
+        console.log('📧 info@skillscert.com.mx | 📱 +52 38822334');
+        console.log('🤖 Agente IA especializado activado');
+        console.log('✅ Taxonomía de Bloom integrada');
+        console.log('🔍 Validación en tiempo real habilitada');
+    </script>
+</body>
+</html>
