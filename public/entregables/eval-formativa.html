@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Evaluación Formativa - Lista de Cotejo / Guía de Observación</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap}
+    .pill{display:inline-flex;gap:.5rem;align-items:center;padding:.35rem .75rem;border-radius:20px;background:rgba(30,58,138,.08);color:#1E3A8A;font-weight:700;font-size:.8rem}
+    .muted{color:var(--muted);font-size:.9rem}
+    .box{border:2px solid var(--border);border-radius:10px;padding:1rem;background:#fff}
+    .flex{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+    .grow{flex:1}
+    .type-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+    .type-card{border:3px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .3s}
+    .type-card.active{border-color:var(--primary);background:rgba(255,107,53,.05)}
+    .type-card h3{margin:.5rem 0;color:var(--secondary)}
+    .type-card p{font-size:.9rem;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin:1rem 0}
+    th,td{border:1px solid var(--border);padding:.8rem;vertical-align:top}
+    th{background:#fafafa;color:var(--secondary);text-align:left}
+    .reactivo-row{background:#fff}
+    .reactivo-row:nth-child(even){background:#fafafa}
+    .actions{display:flex;gap:.5rem;flex-wrap:wrap}
+    textarea{min-height:80px;resize:vertical}
+    .warning{background:rgba(245,158,11,.1);border:2px solid #F59E0B;border-radius:8px;padding:1rem;margin:1rem 0}
+    .success{background:rgba(16,185,129,.1);border:2px solid var(--success);border-radius:8px;padding:1rem;margin:1rem 0}
+    .points-display{background:var(--secondary);color:#fff;padding:.3rem .8rem;border-radius:20px;font-weight:700}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <h1><i class="fa-solid fa-list-check" style="color:#FF6B35"></i> Evaluación Formativa</h1>
+        <div class="toolbar">
+          <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+          <button class="btn btn-secondary" onclick="loadFromCarta()"><i class="fa-solid fa-download"></i> Cargar datos de Carta</button>
+          <button class="btn btn-primary" onclick="generateAI()"><i class="fa-solid fa-robot"></i> Generar con IA</button>
+          <button class="btn btn-primary" onclick="exportDoc('pdf')"><i class="fa-solid fa-file-pdf"></i> Exportar PDF</button>
+          <button class="btn btn-primary" onclick="exportDoc('docx')"><i class="fa-solid fa-file-word"></i> Exportar Word</button>
+          <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Paso 1: Selección del tipo de instrumento -->
+    <div class="card">
+      <h2 class="section-title">Paso 1: Seleccione el tipo de instrumento</h2>
+      <p class="muted">Elija según lo que va a evaluar en su curso:</p>
+      
+      <div class="type-selector">
+        <div class="type-card active" id="tipoLista" onclick="selectType('lista')">
+          <i class="fa-solid fa-clipboard-check" style="font-size:2rem;color:var(--primary)"></i>
+          <h3>Lista de Cotejo</h3>
+          <p><strong>Para evaluar:</strong> Características de un producto entregable</p>
+          <p><strong>Ejemplo:</strong> Verificar que un reporte contenga portada, índice, introducción, conclusiones, etc.</p>
+          <p><strong>Uso:</strong> Cuando el participante debe entregar algo tangible</p>
+        </div>
+        
+        <div class="type-card" id="tipoGuia" onclick="selectType('guia')">
+          <i class="fa-solid fa-eye" style="font-size:2rem;color:var(--primary)"></i>
+          <h3>Guía de Observación</h3>
+          <p><strong>Para evaluar:</strong> Desempeño del participante (lo que hace)</p>
+          <p><strong>Ejemplo:</strong> Observar si realiza una presentación con contacto visual, tono adecuado, gestos apropiados</p>
+          <p><strong>Uso:</strong> Cuando debe demostrar habilidades o ejecutar tareas</p>
+        </div>
+      </div>
+
+      <div id="typeWarning" class="warning">
+        <strong><i class="fa-solid fa-lightbulb"></i> Importante:</strong>
+        <span id="typeExplanation">La Lista de Cotejo evalúa productos (documentos, reportes, presentaciones ya terminadas). La Guía de Observación evalúa desempeños (actividades que el participante realiza en tiempo real).</span>
+      </div>
+    </div>
+
+    <!-- Paso 2: Encabezado con datos del curso -->
+    <div class="card">
+      <h2 class="section-title">Paso 2: Datos del curso (automatizado)</h2>
+      <p class="muted">Se llenan desde la Carta Descriptiva; pueden editarse si es necesario.</p>
+
+      <div class="grid">
+        <input id="cd_nombreCurso" placeholder="Nombre del Curso-Taller">
+        <input id="cd_diseñador" placeholder="Nombre del diseñador">
+        <input id="cd_instructor" placeholder="Nombre del instructor">
+        <input id="cd_lugar" placeholder="Lugar de Impartición">
+        <div class="flex" style="width:100%">
+          <input id="cd_duracion" placeholder="Duración del curso">
+          <input id="cd_horario" placeholder="Horario">
+          <input id="cd_fecha" placeholder="Fecha de impartición">
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 3: Instrucciones de aplicación -->
+    <div class="card">
+      <h2 class="section-title">Paso 3: Instrucciones de aplicación</h2>
+      
+      <div class="box">
+        <h3>Indicaciones para el Instructor</h3>
+        <textarea id="instrucciones" placeholder="Redacte las instrucciones específicas para aplicar este instrumento..."></textarea>
+        <div class="muted">Incluya: cuándo aplicar, cómo explicar a los participantes, tiempo estimado, etc.</div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:2fr 1fr;gap:1rem">
+        <div class="box">
+          <h3>Objetivo del Instrumento</h3>
+          <div id="objetivoDisplay" class="muted">Se actualiza automáticamente según el tipo seleccionado</div>
+        </div>
+        <div class="box">
+          <h3>Tiempo para la evaluación</h3>
+          <input id="tiempoEval" placeholder="Ej: 15 minutos">
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 4: Definición de reactivos -->
+    <div class="card">
+      <h2 class="section-title">Paso 4: Reactivos de evaluación</h2>
+      <div class="flex">
+        <div class="pill">
+          <i class="fa-solid fa-list"></i>
+          Reactivos: <span id="countReactivos">0</span>
+        </div>
+        <div class="pill">
+          <i class="fa-solid fa-calculator"></i>
+          Puntos totales: <span id="puntosTotal" class="points-display">0</span>
+        </div>
+        <button class="btn btn-secondary" onclick="addReactivo()">
+          <i class="fa-solid fa-plus"></i> Agregar reactivo
+        </button>
+        <button class="btn btn-secondary" onclick="distribuirPuntos()">
+          <i class="fa-solid fa-balance-scale"></i> Distribuir puntos
+        </button>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table id="tablaReactivos">
+          <thead>
+            <tr>
+              <th style="width:60px">N.º</th>
+              <th>Descripción</th>
+              <th style="width:80px">Cumple</th>
+              <th style="width:120px">Valor (puntos)</th>
+              <th style="width:100px">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyReactivos">
+            <!-- Reactivos se cargan aquí -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="validacionReactivos" class="warning" style="display:none">
+        <strong><i class="fa-solid fa-exclamation-triangle"></i> Validación:</strong>
+        <span id="mensajeValidacion"></span>
+      </div>
+    </div>
+
+    <!-- Paso 5: Vista previa y validación -->
+    <div class="card">
+      <h2 class="section-title">Paso 5: Vista previa del documento</h2>
+      
+      <div class="success">
+        <h3><i class="fa-solid fa-file-alt"></i> <span id="tituloDocumento">Lista de Cotejo</span></h3>
+        <div style="margin:1rem 0">
+          <strong>Curso:</strong> <span id="prevNombre">-</span><br>
+          <strong>Instructor:</strong> <span id="prevInstructor">-</span><br>
+          <strong>Tipo de evaluación:</strong> <span id="prevTipo">Lista de Cotejo - Productos</span><br>
+          <strong>Reactivos:</strong> <span id="prevReactivos">0</span> | 
+          <strong>Puntos:</strong> <span id="prevPuntos">0</span>
+        </div>
+        
+        <div class="flex">
+          <button class="btn btn-secondary" onclick="showPreview()">
+            <i class="fa-solid fa-eye"></i> Ver vista previa completa
+          </button>
+          <button class="btn btn-primary" onclick="validateDocument()">
+            <i class="fa-solid fa-check-double"></i> Validar documento
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========= CONSTANTES =========
+    const KEY_EVAL_FORM = 'EC0301_EVAL_FORMATIVA';
+    const KEY_CARTA = 'EC0301_CARTA';
+
+    // ========= ESTADO =========
+    let tipoInstrumento = 'lista'; // 'lista' o 'guia'
+    let reactivos = []; // { id, descripcion, puntos }
+
+    // ========= UTILIDADES =========
+    const $ = id => document.getElementById(id);
+    function updateCounters(){
+      $('countReactivos').textContent = reactivos.length;
+      const total = reactivos.reduce((sum, r) => sum + (parseInt(r.puntos) || 0), 0);
+      $('puntosTotal').textContent = total;
+      updatePreview();
+    }
+
+    // ========= PASO 1: SELECCIÓN DE TIPO =========
+    function selectType(tipo) {
+      tipoInstrumento = tipo;
+      
+      // UI
+      document.querySelectorAll('.type-card').forEach(card => card.classList.remove('active'));
+      $('tipo' + (tipo === 'lista' ? 'Lista' : 'Guia')).classList.add('active');
+      
+      // Actualizar objetivo
+      const objetivo = tipo === 'lista' 
+        ? 'Evaluar las características de un producto'
+        : 'Evaluar el desempeño del participante';
+      $('objetivoDisplay').textContent = objetivo;
+      
+      // Actualizar título
+      $('tituloDocumento').textContent = tipo === 'lista' ? 'Lista de Cotejo' : 'Guía de Observación';
+      $('prevTipo').textContent = tipo === 'lista' 
+        ? 'Lista de Cotejo - Productos' 
+        : 'Guía de Observación - Desempeños';
+      
+      // Actualizar explicación
+      const explicacion = tipo === 'lista'
+        ? 'La Lista de Cotejo evalúa productos tangibles (documentos, reportes, presentaciones terminadas). Use verbos como: "Contiene", "Incluye", "Presenta", "Muestra".'
+        : 'La Guía de Observación evalúa desempeños observables (lo que hace el participante). Use verbos como: "Realiza", "Ejecuta", "Demuestra", "Aplica".';
+      $('typeExplanation').textContent = explicación;
+      
+      saveDraft();
+      updateSuggestedReactivos();
+    }
+
+    // ========= PASO 2: CARGA DE DATOS =========
+    function loadFromCarta() {
+      try {
+        const raw = localStorage.getItem(KEY_CARTA);
+        if (!raw) { toast('No hay datos de Carta Descriptiva guardados', 'warn'); return; }
+        
+        const cd = JSON.parse(raw);
+        $('cd_nombreCurso').value = cd.nombre || '';
+        $('cd_diseñador').value = cd.diseñador || '';
+        $('cd_instructor').value = cd.instructor || '';
+        $('cd_lugar').value = cd.lugar || '';
+        $('cd_duracion').value = cd.duracion ? cd.duracion + ' horas' : '';
+        $('cd_horario').value = cd.horario || '';
+        $('cd_fecha').value = cd.fechas || '';
+        
+        updatePreview();
+        toast('Datos cargados desde Carta Descriptiva', 'ok');
+      } catch {
+        toast('Error al cargar datos de la Carta', 'err');
+      }
+    }
+
+    // ========= PASO 4: GESTIÓN DE REACTIVOS =========
+    function addReactivo() {
+      const id = 'r' + Date.now();
+      const descripcion = tipoInstrumento === 'lista'
+        ? 'Redacte el aspecto sobre las características del producto'
+        : 'Redacte el aspecto a evaluar del desempeño del participante';
+      
+      reactivos.push({ id, descripcion, puntos: 5 });
+      renderReactivos();
+      saveDraft();
+    }
+
+    function deleteReactivo(id) {
+      reactivos = reactivos.filter(r => r.id !== id);
+      renderReactivos();
+      saveDraft();
+    }
+
+    function updateReactivo(id, field, value) {
+      const reactivo = reactivos.find(r => r.id === id);
+      if (reactivo) {
+        reactivo[field] = value;
+        updateCounters();
+        saveDraft();
+      }
+    }
+
+    function renderReactivos() {
+      const tbody = $('tbodyReactivos');
+      tbody.innerHTML = reactivos.map((r, index) => `
+        <tr class="reactivo-row">
+          <td style="text-align:center;font-weight:bold">${index + 1}</td>
+          <td>
+            <textarea onchange="updateReactivo('${r.id}', 'descripcion', this.value)" 
+                      style="width:100%;min-height:80px;border:1px solid var(--border);border-radius:6px;padding:.5rem"
+                      placeholder="${tipoInstrumento === 'lista' ? 'Describe qué característica debe tener el producto' : 'Describe qué acción debe realizar el participante'}">${r.descripcion}</textarea>
+          </td>
+          <td style="text-align:center">
+            <div style="display:flex;gap:.3rem;justify-content:center">
+              <div style="background:#10B981;color:#fff;padding:.3rem .6rem;border-radius:4px;font-size:.8rem">SÍ</div>
+              <div style="background:#EF4444;color:#fff;padding:.3rem .6rem;border-radius:4px;font-size:.8rem">NO</div>
+            </div>
+          </td>
+          <td>
+            <input type="number" min="1" max="20" value="${r.puntos}" 
+                   onchange="updateReactivo('${r.id}', 'puntos', this.value)"
+                   style="width:100%;padding:.5rem;border:1px solid var(--border);border-radius:6px;text-align:center">
+          </td>
+          <td>
+            <button class="btn btn-secondary" onclick="deleteReactivo('${r.id}')" style="padding:.4rem .6rem">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      
+      updateCounters();
+    }
+
+    function distribuirPuntos() {
+      if (reactivos.length === 0) {
+        toast('Agregue al menos un reactivo primero', 'warn');
+        return;
+      }
+      
+      const puntosIguales = Math.floor(100 / reactivos.length);
+      const residuo = 100 % reactivos.length;
+      
+      reactivos.forEach((r, index) => {
+        r.puntos = puntosIguales + (index < residuo ? 1 : 0);
+      });
+      
+      renderReactivos();
+      toast(`Puntos distribuidos equitativamente: ${puntosIguales}${residuo > 0 ? `(+1 a los primeros ${residuo})` : ''} puntos por reactivo`, 'ok');
+    }
+
+    // ========= GENERACIÓN CON IA =========
+    function generateAI() {
+      if (tipoInstrumento === 'lista') {
+        generateListaCotejo();
+      } else {
+        generateGuiaObservacion();
+      }
+    }
+
+    function generateListaCotejo() {
+      const reactivos_ia = [
+        { descripcion: 'El producto contiene portada con título, autor y fecha', puntos: 10 },
+        { descripcion: 'Incluye índice o tabla de contenidos estructurada', puntos: 10 },
+        { descripcion: 'Presenta introducción que explica el propósito', puntos: 15 },
+        { descripcion: 'Desarrolla el contenido principal de forma organizada', puntos: 30 },
+        { descripcion: 'Incluye conclusiones coherentes con el desarrollo', puntos: 15 },
+        { descripcion: 'Contiene referencias bibliográficas en formato correcto', puntos: 10 },
+        { descripcion: 'Muestra ortografía y redacción adecuadas', puntos: 10 }
+      ];
+      
+      addReactivosIA(reactivos_ia);
+    }
+
+    function generateGuiaObservacion() {
+      const reactivos_ia = [
+        { descripcion: 'Realiza saludo inicial y se presenta apropiadamente', puntos: 10 },
+        { descripcion: 'Explica el objetivo de la actividad de forma clara', puntos: 15 },
+        { descripcion: 'Demuestra dominio del tema durante la exposición', puntos: 25 },
+        { descripcion: 'Mantiene contacto visual con la audiencia', puntos: 10 },
+        { descripcion: 'Utiliza un tono de voz audible y apropiado', puntos: 10 },
+        { descripcion: 'Emplea gestos y movimientos que apoyan el mensaje', puntos: 10 },
+        { descripcion: 'Responde preguntas de manera adecuada', puntos: 10 },
+        { descripcion: 'Realiza cierre con síntesis de puntos clave', puntos: 10 }
+      ];
+      
+      addReactivosIA(reactivos_ia);
+    }
+
+    function addReactivosIA(reactivos_ia) {
+      reactivos_ia.forEach(r => {
+        const id = 'r' + Date.now() + Math.random().toString(16).slice(2);
+        reactivos.push({ id, descripcion: r.descripcion, puntos: r.puntos });
+      });
+      
+      renderReactivos();
+      toast(`Se agregaron ${reactivos_ia.length} reactivos sugeridos por IA`, 'ok');
+    }
+
+    function updateSuggestedReactivos() {
+      // Limpiar sugerencias anteriores y mostrar ejemplos específicos
+      const ejemplos = tipoInstrumento === 'lista' 
+        ? 'Ejemplos: "Contiene portada completa", "Incluye índice estructurado", "Presenta conclusiones coherentes"'
+        : 'Ejemplos: "Realiza presentación clara", "Demuestra habilidades técnicas", "Ejecuta procedimiento correctamente"';
+      
+      // Actualizar placeholders dinámicamente si hay reactivos existentes
+      document.querySelectorAll('#tbodyReactivos textarea').forEach(textarea => {
+        textarea.placeholder = tipoInstrumento === 'lista' 
+          ? 'Describe qué característica debe tener el producto'
+          : 'Describe qué acción debe realizar el participante';
+      });
+    }
+
+    // ========= PASO 5: VISTA PREVIA Y VALIDACIÓN =========
+    function updatePreview() {
+      $('prevNombre').textContent = $('cd_nombreCurso').value || '-';
+      $('prevInstructor').textContent = $('cd_instructor').value || '-';
+      $('prevReactivos').textContent = reactivos.length;
+      $('prevPuntos').textContent = reactivos.reduce((sum, r) => sum + (parseInt(r.puntos) || 0), 0);
+      
+      // Validar puntos
+      const totalPuntos = parseInt($('prevPuntos').textContent);
+      const validacion = $('validacionReactivos');
+      const mensaje = $('mensajeValidacion');
+      
+      if (totalPuntos !== 100) {
+        validacion.style.display = 'block';
+        mensaje.textContent = `Los puntos deben sumar exactamente 100. Actual: ${totalPuntos}`;
+      } else if (reactivos.length < 5) {
+        validacion.style.display = 'block';
+        mensaje.textContent = `Se recomienda tener al menos 5 reactivos. Actual: ${reactivos.length}`;
+      } else {
+        validacion.style.display = 'none';
+      }
+    }
+
+    function showPreview() {
+      // Generar vista previa completa en modal o nueva ventana
+      const preview = generateDocumentContent();
+      const win = window.open('', '_blank', 'width=800,height=600');
+      win.document.write(`
+        <html>
+          <head><title>Vista Previa - ${tipoInstrumento === 'lista' ? 'Lista de Cotejo' : 'Guía de Observación'}</title></head>
+          <body style="font-family:Arial;padding:2rem;line-height:1.5">
+            <pre style="white-space:pre-wrap">${preview}</pre>
+          </body>
+        </html>
+      `);
+      win.document.close();
+    }
+
+    function validateDocument() {
+      const totalPuntos = reactivos.reduce((sum, r) => sum + (parseInt(r.puntos) || 0), 0);
+      const issues = [];
+      
+      if (!$('cd_nombreCurso').value) issues.push('Falta nombre del curso');
+      if (!$('cd_instructor').value) issues.push('Falta nombre del instructor');
+      if (reactivos.length < 3) issues.push('Se requieren al menos 3 reactivos');
+      if (totalPuntos !== 100) issues.push(`Los puntos deben sumar 100 (actual: ${totalPuntos})`);
+      if (!$('instrucciones').value) issues.push('Faltan instrucciones para el instructor');
+      if (!$('tiempoEval').value) issues.push('Falta tiempo de evaluación');
+      
+      if (issues.length > 0) {
+        toast('Documento incompleto: ' + issues.join(', '), 'err');
+      } else {
+        toast('✅ Documento válido y listo para exportar', 'ok');
+      }
+    }
+
+    // ========= EXPORTACIÓN =========
+    function generateDocumentContent() {
+      const tipo = tipoInstrumento === 'lista' ? 'Lista de cotejo' : 'Guía de observación';
+      const objetivo = tipoInstrumento === 'lista' 
+        ? 'Evaluar las características de un producto'
+        : 'Evaluar el desempeño del participante';
+      
+      let content = `Evaluación formativa\n${tipo}\n\n`;
+      content += `Nombre del Curso-Taller: ${$('cd_nombreCurso').value}\n`;
+      content += `Nombre del diseñador: ${$('cd_diseñador').value}\n`;
+      content += `Lugar de Impartición: ${$('cd_lugar').value}\n`;
+      content += `Nombre del instructor: ${$('cd_instructor').value}\n`;
+      content += `Duración del curso: ${$('cd_duracion').value}\n`;
+      content += `Horario: ${$('cd_horario').value}\n`;
+      content += `Fecha de impartición: ${$('cd_fecha').value}\n\n`;
+      
+      content += `INSTRUCCIONES DE APLICACIÓN\n\n`;
+      content += `Indicaciones para el Instructor: ${$('instrucciones').value}\n\n`;
+      content += `Objetivo del Instrumento: ${objetivo}\n`;
+      content += `Tiempo para la evaluación: ${$('tiempoEval').value}\n\n`;
+      
+      content += `REACTIVOS:\n\n`;
+      content += `REACTIVO\tDESCRIPCIÓN\tCUMPLE\tVALOR DE CADA REACTIVO\n`;
+      content += `\t\tSÍ\tNO\t\n\n`;
+      
+      reactivos.forEach((r, index) => {
+        content += `${index + 1}\t${r.descripcion}\t\t\t${r.puntos}\n\n`;
+      });
+      
+      content += `\n\nNombre y firma Instructor\n\n_______________________________`;
+      
+      return content;
+    }
+
+    function exportDoc(format) {
+      const content = generateDocumentContent();
+      const filename = `${tipoInstrumento === 'lista' ? 'Lista_Cotejo' : 'Guia_Observacion'}_${new Date().toISOString().slice(0,10)}.${format === 'pdf' ? 'txt' : 'docx'}`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      toast(`Documento exportado: ${filename}`, 'ok');
+    }
+
+    // ========= PERSISTENCIA =========
+    function saveDraft() {
+      const data = {
+        tipo: tipoInstrumento,
+        curso: {
+          nombre: $('cd_nombreCurso').value,
+          diseñador: $('cd_diseñador').value,
+          instructor: $('cd_instructor').value,
+          lugar: $('cd_lugar').value,
+          duracion: $('cd_duracion').value,
+          horario: $('cd_horario').value,
+          fecha: $('cd_fecha').value
+        },
+        instrucciones: $('instrucciones').value,
+        tiempo: $('tiempoEval').value,
+        reactivos: reactivos
+      };
+      
+      localStorage.setItem(KEY_EVAL_FORM, JSON.stringify(data));
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(KEY_EVAL_FORM);
+        if (!raw) return;
+        
+        const data = JSON.parse(raw);
+        
+        // Restaurar tipo
+        if (data.tipo) {
+          selectType(data.tipo);
+        }
+        
+        // Restaurar datos del curso
+        if (data.curso) {
+          $('cd_nombreCurso').value = data.curso.nombre || '';
+          $('cd_diseñador').value = data.curso.diseñador || '';
+          $('cd_instructor').value = data.curso.instructor || '';
+          $('cd_lugar').value = data.curso.lugar || '';
+          $('cd_duracion').value = data.curso.duracion || '';
+          $('cd_horario').value = data.curso.horario || '';
+          $('cd_fecha').value = data.curso.fecha || '';
+        }
+        
+        // Restaurar otros campos
+        $('instrucciones').value = data.instrucciones || '';
+        $('tiempoEval').value = data.tiempo || '';
+        
+        // Restaurar reactivos
+        reactivos = data.reactivos || [];
+        renderReactivos();
+        
+      } catch (error) {
+        console.log('Error loading draft:', error);
+      }
+    }
+
+    function markComplete() {
+      parent?.postMessage({ deliverable: 6, progress: 100 }, '*');
+      toast('Evaluación formativa marcada al 100%', 'ok');
+    }
+
+    // ========= INICIALIZACIÓN =========
+    document.addEventListener('DOMContentLoaded', () => {
+      selectType('lista'); // Tipo por defecto
+      loadDraft();
+      updateCounters();
+      
+      // Auto-guardar cada vez que se edita
+      ['cd_nombreCurso', 'cd_diseñador', 'cd_instructor', 'cd_lugar', 'cd_duracion', 'cd_horario', 'cd_fecha', 'instrucciones', 'tiempoEval'].forEach(id => {
+        $(id).addEventListener('input', () => {
+          updatePreview();
+          saveDraft();
+        });
+      });
+    });
+  </script>
+
+  <script src="/assets/common.js"></script>
+</body>
+</html>
