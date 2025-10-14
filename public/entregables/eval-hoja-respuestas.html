@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hoja de Respuestas Unificada</title>
+  <link rel="stylesheet" href="/assets/common.css">
+  <style>
+    .toolbar { display:flex; gap:1rem; margin-bottom:1rem }
+    .section-title { font-weight:bold; color:var(--secondary); margin:1rem 0 }
+    ul { list-style:none; padding:0 }
+    li { margin:.5rem 0 }
+    button { padding:.6rem 1.2rem }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+      <button class="btn btn-primary" onclick="generatePDF()">
+        <i class="fa-solid fa-file-pdf"></i> Generar PDF
+      </button>
+    </div>
+    <h2 class="section-title">Hoja de Respuestas Unificada</h2>
+
+    <div id="headerInfo">
+      <strong>Curso:</strong> <span id="hd_curso"></span><br>
+      <strong>Instructor:</strong> <span id="hd_instructor"></span><br>
+      <strong>Lugar:</strong> <span id="hd_lugar"></span><br>
+      <strong>Fecha:</strong> <span id="hd_fecha"></span>
+    </div>
+
+    <h3 class="section-title">Módulos incluidos</h3>
+    <ul>
+      <li>✓ Evaluación Diagnóstica</li>
+      <li>✓ Evaluación Sumativa</li>
+      <li>✓ Evaluación Formativa</li>
+    </ul>
+  </div>
+
+  <script>
+    const KEY_CARTA = 'EC0301_CARTA';
+    document.addEventListener('DOMContentLoaded', () => {
+      const c = JSON.parse(localStorage.getItem(KEY_CARTA)||'{}');
+      document.getElementById('hd_curso').textContent = c.nombre || '';
+      document.getElementById('hd_instructor').textContent = c.instructor || '';
+      document.getElementById('hd_lugar').textContent = c.lugar || '';
+      document.getElementById('hd_fecha').textContent = c.fecha || '';
+    });
+
+    function generatePDF(){
+      fetch('/api/collect-responses', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ courseId: 'EC0301' })
+      })
+      .then(r=>r.json())
+      .then(data => {
+        return fetch('/api/generate-unified-sheet', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+      })
+      .then(r=>r.blob())
+      .then(blob=>{
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Hoja_Respuestas_Unificada.pdf';
+        a.click();
+      });
+    }
+  </script>
+  <script src="/assets/common.js"></script>
+</body>
+</html>
