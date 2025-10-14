@@ -3,48 +3,124 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Evaluación Diagnóstica EC0301</title>
+  <title>Evaluación Diagnóstica</title>
   <link rel="stylesheet" href="/assets/common.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .toolbar{display:flex;gap:1rem;margin-bottom:1rem}
+    textarea,input{width:100%;padding:.8rem;border:2px solid var(--border);border-radius:8px;margin-bottom:1rem}
+    table{width:100%;border-collapse:collapse;margin:1rem 0}
+    th,td{border:1px solid var(--border);padding:.6rem}
+    th{background:#f9fafb}
+  </style>
 </head>
 <body>
-  <div class="header">
-    <div class="container">
-      <div class="row">
-        <h1><i class="fa-solid fa-clipboard-list" style="color:#FF6B35"></i> Evaluación Diagnóstica</h1>
-        <div>
-          <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
-          <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="container">
-    <div class="card">
-      <h2 class="section-title">Evaluación Diagnóstica</h2>
-      <p>Sistema completo con IA para generar reactivos y validación automática.</p>
-      
-      <div style="text-align: center; padding: 3rem;">
-        <i class="fa-solid fa-brain" style="font-size: 4rem; color: var(--primary); margin-bottom: 2rem;"></i>
-        <h3>Evaluación Diagnóstica en desarrollo</h3>
-        <p style="color: var(--muted);">Este módulo incluirá generación automática de preguntas con IA.</p>
-        <button class="btn btn-primary" onclick="markComplete()">
-          <i class="fa-solid fa-check"></i> Marcar como completado (demo)
-        </button>
-      </div>
+    <div class="toolbar">
+      <a class="btn btn-secondary" href="/"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+      <button class="btn btn-secondary" onclick="loadHeader()"><i class="fa-solid fa-download"></i> Cargar Carta</button>
+      <button class="btn btn-primary" onclick="saveHeader()"><i class="fa-solid fa-save"></i> Guardar Encabezado</button>
+      <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF</button>
+      <button class="btn btn-primary" onclick="markComplete()"><i class="fa-solid fa-check"></i> Marcar 100%</button>
     </div>
+
+    <h2>1) Encabezado</h2>
+    <input id="hd_curso" placeholder="Nombre del curso">
+    <input id="hd_instructor" placeholder="Instructor">
+    <input id="hd_lugar" placeholder="Lugar">
+    <input id="hd_duracion" placeholder="Duración (hrs)">
+    <input id="hd_fecha" placeholder="Fecha">
+
+    <h2>2) Reactivos</h2>
+    <button class="btn btn-secondary" onclick="addQuestion()"><i class="fa-solid fa-plus"></i> Agregar Reactivo</button>
+    <table>
+      <thead><tr><th>No.</th><th>Pregunta</th><th>Acción</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
   </div>
 
   <script>
-    function markComplete(){
-      parent?.postMessage({ deliverable: 4, progress: 100 }, '*');
-      toast('Evaluación Diagnóstica marcada al 100%', 'ok');
+    const KEY_HDR='EC0301_EVAL_DIAG_HDR';
+    const KEY_DATA='EC0301_EVAL_DIAG';
+    let preguntas=[];
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      // Cargar encabezado desde localStorage
+      const hdr=JSON.parse(localStorage.getItem(KEY_HDR)||'{}');
+      ['curso','instructor','lugar','duracion','fecha'].forEach(k=>{
+        document.getElementById('hd_'+k).value=hdr[k]||'';
+      });
+      // Cargar reactivos
+      preguntas=JSON.parse(localStorage.getItem(KEY_DATA)||'[]');
+      render();
+    });
+
+    function loadHeader(){
+      const c=JSON.parse(localStorage.getItem('EC0301_CARTA')||'{}');
+      if(c.nombre){ hd_curso.value=c.nombre; }
+      if(c.instructor){ hd_instructor.value=c.instructor; }
+      if(c.lugar){ hd_lugar.value=c.lugar; }
+      if(c.duracion){ hd_duracion.value=c.duracion; }
+      if(c.fecha){ hd_fecha.value=c.fecha; }
+      alert('Datos de Carta cargados');
     }
-    
-    function toast(msg, type='info'){
-      console.log(msg);
-      try { window.parent?.toast?.(msg, type); } catch{}
+
+    function saveHeader(){
+      const hdr={
+        curso:hd_curso.value, instructor:hd_instructor.value,
+        lugar:hd_lugar.value, duracion:hd_duracion.value, fecha:hd_fecha.value
+      };
+      localStorage.setItem(KEY_HDR, JSON.stringify(hdr));
+      alert('Encabezado guardado');
+    }
+
+    function addQuestion(){
+      preguntas.push({ texto:'' });
+      persist(); render();
+    }
+    function deleteQuestion(i){
+      preguntas.splice(i,1);
+      persist(); render();
+    }
+    function updateQuestion(i,val){
+      preguntas[i].texto=val;
+      persist();
+    }
+    function render(){
+      tbody.innerHTML='';
+      preguntas.forEach((q,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td>${i+1}</td>
+          <td><textarea oninput="updateQuestion(${i},this.value)">${q.texto}</textarea></td>
+          <td><button onclick="deleteQuestion(${i})">Eliminar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    function persist(){
+      localStorage.setItem(KEY_DATA, JSON.stringify(preguntas));
+    }
+
+    function generatePDF(){
+      const hdr=JSON.parse(localStorage.getItem(KEY_HDR)||'{}');
+      fetch('/api/generate-diag-pdf',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ encabezado:hdr, preguntas })
+      })
+      .then(r=>r.blob())
+      .then(blob=>{
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;
+        a.download='Evaluacion_Diagnostica.pdf';
+        a.click();
+      });
+    }
+
+    function markComplete(){
+      parent?.postMessage({deliverable:4,progress:100},'*');
+      alert('Diagnóstica marcada 100%');
     }
   </script>
   <script src="/assets/common.js"></script>
